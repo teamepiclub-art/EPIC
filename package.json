@@ -1,6 +1,6 @@
 {
   "name": "epic-club-portal",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Official Website and Student Portal for EPIC CLUB - Faculty of Medicine of Sétif, Algeria",
   "main": "server.js",
   "scripts": {
@@ -9,6 +9,9 @@
     "migrate": "node db/cli.js",
     "test": "node scratch/test_backend.js"
   },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  },
   "keywords": [
     "epic-club",
     "medicine",
@@ -16,5 +19,8 @@
     "scientific-club"
   ],
   "author": "EPIC CLUB",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
 }
