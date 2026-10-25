@@ -1,0 +1,2569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPIC CLUB — Administration Portal</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="epic-mark.svg">
+
+  <!-- Google Fonts: Inter, Outfit, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cyan: #00B8D9;
+      --cyan-hover: #0098B3;
+      --cyan-light: #E6F9FC;
+      --cyan-subtle: rgba(0, 184, 217, 0.08);
+
+      --ice: #F4FBFD;
+      --ice-surface: #FFFFFF;
+      --card-bg: #FFFFFF;
+
+      --mint: #35BFA3;
+      --mint-light: #EAF9F5;
+      --mint-border: #A3E8D9;
+
+      --yellow: #FCE445;
+      --amber: #FFAB00;
+      --amber-bg: #FFF9E6;
+      --amber-border: #FFE380;
+      --amber-text: #974F0C;
+
+      --red: #DE350B;
+      --red-bg: #FFEBE6;
+      --red-border: #FFBDAD;
+
+      --midnight: #172B4D;
+      --navy: #102A43;
+
+      --text-main: #102A43;
+      --text-muted: #5E6C84;
+      --text-subtle: #8993A4;
+
+      --border-color: #E2ECF2;
+      --border-dark: #C0D6E4;
+
+      --radius-xs: 6px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 3px rgba(16, 42, 67, 0.06);
+      --shadow-md: 0 4px 16px rgba(16, 42, 67, 0.06);
+      --shadow-lg: 0 14px 34px -8px rgba(16, 42, 67, 0.12), 0 2px 8px rgba(16, 42, 67, 0.04);
+
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-heading: 'Outfit', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background-color: #F7FBFC;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    /* LOGIN VIEW */
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(circle at 10% 20%, rgba(0, 184, 217, 0.08) 0%, transparent 40%),
+                  radial-gradient(circle at 90% 80%, rgba(53, 191, 163, 0.07) 0%, transparent 40%),
+                  #F4FBFD;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--mint) 50%, var(--yellow) 100%);
+    }
+
+    .login-brand-wrap {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .login-logo {
+      height: 44px;
+      width: auto;
+      margin-bottom: 12px;
+    }
+
+    .login-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--navy);
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+    }
+
+    .login-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+
+    .login-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-field label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--midnight);
+    }
+
+    .form-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      font-size: 14.5px;
+      font-family: var(--font-body);
+      color: var(--navy);
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .form-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0, 184, 217, 0.15);
+    }
+
+    .btn-login {
+      height: 48px;
+      background: var(--navy);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      margin-top: 8px;
+      box-shadow: 0 4px 12px rgba(16, 42, 67, 0.14);
+    }
+    .btn-login:hover {
+      background: #173859;
+      transform: translateY(-1px);
+    }
+    .btn-login:disabled {
+      background: #A5B2C6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .login-alert {
+      display: none;
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      color: var(--red);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      margin-top: 14px;
+    }
+
+    /* DASHBOARD VIEW */
+    .dashboard-layout {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    /* Admin Top Bar */
+    .admin-navbar {
+      height: 64px;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: 0 1px 4px rgba(16, 42, 67, 0.03);
+    }
+
+    .admin-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .admin-logo {
+      height: 36px;
+      width: auto;
+    }
+
+    .admin-portal-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--cyan-subtle);
+      color: var(--cyan);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.04em;
+    }
+
+    .admin-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-user-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ice);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .user-avatar-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--mint);
+    }
+
+    .btn-nav-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--midnight);
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-nav-action:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .btn-logout {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-logout:hover {
+      background: var(--red-bg);
+      border-color: var(--red-border);
+      color: var(--red);
+    }
+
+    /* Dashboard Main Body */
+    .dashboard-body {
+      flex: 1;
+      max-width: 1340px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 28px 24px 60px;
+    }
+
+    .dashboard-header-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .dash-heading {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .dash-subtext {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .refresh-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--midnight);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .refresh-btn:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    /* Summary Stat Cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+    .stat-card.stat-total::before { background: var(--cyan); }
+    .stat-card.stat-pending::before { background: var(--amber); }
+    .stat-card.stat-confirmed::before { background: var(--mint); }
+    .stat-card.stat-rejected::before { background: var(--red); }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stat-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .stat-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stat-total .stat-icon { background: var(--cyan-subtle); color: var(--cyan); }
+    .stat-pending .stat-icon { background: var(--amber-bg); color: var(--amber-text); }
+    .stat-confirmed .stat-icon { background: var(--mint-light); color: var(--mint); }
+    .stat-rejected .stat-icon { background: var(--red-bg); color: var(--red); }
+
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.1;
+    }
+
+    .stat-foot {
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+
+    /* Filter & Search Bar */
+    .table-control-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .table-toolbar {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-box-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+      max-width: 460px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 40px;
+      padding-left: 40px;
+      padding-right: 14px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      outline: none;
+      font-family: var(--font-body);
+      transition: all 0.2s ease;
+    }
+    .search-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0, 184, 217, 0.12);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--midnight);
+    }
+
+    .filter-select {
+      height: 38px;
+      padding: 0 12px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: #FFFFFF;
+      font-size: 13px;
+      font-family: var(--font-body);
+      color: var(--navy);
+      outline: none;
+      cursor: pointer;
+    }
+    .filter-select:focus {
+      border-color: var(--cyan);
+    }
+
+    /* Registrations Table */
+    .table-responsive {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    .registrations-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13.5px;
+    }
+
+    .registrations-table th {
+      background: #F8FAFC;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 14px 18px;
+      border-bottom: 1.5px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .registrations-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .registrations-table tr:hover td {
+      background-color: #FAFCFE;
+    }
+
+    .ref-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--cyan);
+      background: var(--cyan-subtle);
+      padding: 3px 8px;
+      border-radius: var(--radius-xs);
+      display: inline-block;
+    }
+
+    .telegram-link {
+      color: #0088cc;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .telegram-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Status Pills */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      letter-spacing: 0.02em;
+    }
+    .status-pill.status-pending {
+      background: var(--amber-bg);
+      color: var(--amber-text);
+      border: 1px solid var(--amber-border);
+    }
+    .status-pill.status-confirmed {
+      background: var(--mint-light);
+      color: #0E7B62;
+      border: 1px solid var(--mint-border);
+    }
+    .status-pill.status-rejected {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid var(--red-border);
+    }
+
+    .dot-indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .status-pending .dot-indicator { background: var(--amber); }
+    .status-confirmed .dot-indicator { background: var(--mint); }
+    .status-rejected .dot-indicator { background: var(--red); }
+
+    /* Telegram Delivery Badge */
+    .tele-status-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid transparent;
+    }
+    .tele-not-sent { background: #F0F4F8; color: var(--text-muted); border-color: #D3DFE8; }
+    .tele-pending-linking { background: #FFF9E6; color: #974F0C; border-color: #FFE380; }
+    .tele-delivered { background: #E8F5E9; color: #2E7D32; border-color: #C8E6C9; }
+    .tele-failed { background: #FFEBE6; color: #DE350B; border-color: #FFBDAD; }
+    .tele-joined { background: #EDE7F6; color: #512DA8; border-color: #D1C4E9; }
+    .tele-revoked { background: #F3E5F5; color: #7B1FA2; border-color: #E1BEE7; }
+
+    /* Account Linked Badge */
+    .account-linked-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      background: #E8F5E9;
+      color: #2E7D32;
+      border: 1px solid #C8E6C9;
+    }
+
+    .account-pending-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      background: #FFF9E6;
+      color: #974F0C;
+      border: 1px solid #FFE380;
+    }
+
+    /* Table Actions */
+    .action-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-act {
+      height: 30px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-xs);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid var(--border-color);
+      background: #FFFFFF;
+      color: var(--midnight);
+      transition: all 0.15s ease;
+    }
+    .btn-act:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .btn-act-confirm {
+      color: #0E7B62;
+      border-color: var(--mint-border);
+      background: var(--mint-light);
+    }
+    .btn-act-confirm:hover {
+      background: #D4F4EC;
+      color: #0B614D;
+      border-color: #0B614D;
+    }
+
+    .btn-act-reject {
+      color: var(--red);
+      border-color: var(--red-border);
+      background: var(--red-bg);
+    }
+    .btn-act-reject:hover {
+      background: #FFD8CE;
+      color: #BF2600;
+      border-color: #BF2600;
+    }
+
+    .empty-state {
+      padding: 48px 20px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+    .empty-state svg {
+      color: var(--text-subtle);
+      margin-bottom: 12px;
+    }
+
+    /* Pagination Footer */
+    .pagination-bar {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-color);
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-page {
+      height: 32px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      background: #FFFFFF;
+      border-radius: var(--radius-xs);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: var(--midnight);
+    }
+    .btn-page:hover:not(:disabled) {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .btn-page:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* MODAL / DIALOGS */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(16, 42, 67, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalSlide {
+      from { transform: translateY(16px) scale(0.97); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-subtle);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close-btn:hover {
+      color: var(--navy);
+      background: var(--ice);
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-color);
+      background: #F8FAFC;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .detail-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      background: var(--ice);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      margin-bottom: 22px;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .detail-k {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .detail-v {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    /* History Timeline */
+    .history-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-left: 2px solid var(--border-color);
+      padding-left: 16px;
+      margin-left: 6px;
+      margin-bottom: 20px;
+    }
+
+    .history-node {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .history-node::before {
+      content: '';
+      position: absolute;
+      left: -21px;
+      top: 4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 0 0 1px var(--border-color);
+    }
+
+    .history-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .history-time {
+      font-size: 11.5px;
+      color: var(--text-subtle);
+      font-family: var(--font-mono);
+    }
+
+    .history-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Toast Notification */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--navy);
+      color: #FFFFFF;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      max-width: 440px;
+      line-height: 1.4;
+      animation: toastIn 0.3s ease;
+    }
+    .toast-msg.active {
+      display: flex;
+    }
+    .toast-msg.toast-warning {
+      background: #974F0C;
+      border-left: 4px solid var(--amber);
+    }
+    .toast-msg.toast-error {
+      background: #BF2600;
+      border-left: 4px solid var(--red);
+    }
+    .toast-msg.toast-success {
+      background: #1B5E20;
+      border-left: 4px solid var(--mint);
+    }
+    @keyframes toastIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Table loading skeleton */
+    .table-loading-row td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .skeleton-cell {
+      height: 14px;
+      background: linear-gradient(90deg, #E2ECF2 25%, #F0F6FA 50%, #E2ECF2 75%);
+      background-size: 200% 100%;
+      border-radius: 6px;
+      animation: shimmer 1.4s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @media (max-width: 900px) {
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+      .admin-navbar {
+        padding: 0 16px;
+      }
+      .dashboard-body {
+        padding: 20px 14px;
+      }
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================================
+       1. SECURE ADMINISTRATOR LOGIN SCREEN
+       ========================================================================= -->
+  <div class="login-container" id="loginView">
+    <div class="login-card">
+      <div class="login-brand-wrap">
+        <img src="epic-logo-horizontal.png" alt="EPIC CLUB" class="login-logo">
+        <div>
+          <span class="login-badge">Restricted Access</span>
+        </div>
+        <h1 class="login-title">Admin Portal</h1>
+        <p class="login-desc">Sign in to manage candidate registrations and verify recruitment records.</p>
+      </div>
+
+      <form id="adminLoginForm" class="login-form">
+        <div class="form-field">
+          <label for="adminUsername">Administrator Username</label>
+          <input 
+            type="text" 
+            id="adminUsername" 
+            class="form-input" 
+            placeholder="admin" 
+            required 
+            autocomplete="username"
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="adminPassword">Password</label>
+          <input 
+            type="password" 
+            id="adminPassword" 
+            class="form-input" 
+            placeholder="••••••••••••" 
+            required 
+            autocomplete="current-password"
+          >
+        </div>
+
+        <button type="submit" class="btn-login" id="loginSubmitBtn">
+          <span>Sign In to Dashboard</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+
+        <div class="login-alert" id="loginAlert"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       2. SECURE DASHBOARD VIEW
+       ========================================================================= -->
+  <div class="dashboard-layout" id="dashboardView">
+    
+    <!-- Top Navbar -->
+    <header class="admin-navbar">
+      <div class="admin-nav-left">
+        <a href="/" title="Go to public homepage">
+          <img src="epic-logo-horizontal.png" alt="EPIC CLUB" class="admin-logo">
+        </a>
+        <span class="admin-portal-badge">Recruitment Console</span>
+      </div>
+
+      <div class="admin-nav-right">
+        <button type="button" class="btn-nav-action" id="btnOpenSettings" title="Configure Telegram Bot">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"></path></svg>
+          <span>Telegram Config</span>
+        </button>
+
+        <div class="admin-user-pill">
+          <span class="user-avatar-dot"></span>
+          <span id="navAdminName">admin</span>
+        </div>
+
+        <button type="button" class="btn-logout" id="logoutBtn" title="Logout session">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="dashboard-body">
+      
+      <!-- Header Row -->
+      <div class="dashboard-header-row">
+        <div>
+          <h1 class="dash-heading">Registration Management</h1>
+          <p class="dash-subtext">Review applications, independently verify participant completion, and issue unique Telegram group invitations.</p>
+        </div>
+
+        <div class="header-btn-group">
+          <button type="button" class="refresh-btn" id="refreshBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            <span>Refresh Data</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary Stat Cards -->
+      <section class="summary-grid" aria-label="Dashboard Metrics">
+        
+        <!-- Total -->
+        <div class="stat-card stat-total">
+          <div class="stat-header">
+            <span class="stat-label">Total Submissions</span>
+            <div class="stat-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+          </div>
+          <div class="stat-value" id="statTotalCount">0</div>
+          <div class="stat-foot">Overall candidate database</div>
+        </div>
+
+        <!-- Pending -->
+        <div class="stat-card stat-pending">
+          <div class="stat-header">
+            <span class="stat-label">Pending Review</span>
+            <div class="stat-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            </div>
+          </div>
+          <div class="stat-value" id="statPendingCount">0</div>
+          <div class="stat-foot">Awaiting recruitment decision</div>
+        </div>
+
+        <!-- Confirmed -->
+        <div class="stat-card stat-confirmed">
+          <div class="stat-header">
+            <span class="stat-label">Confirmed</span>
+            <div class="stat-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+          </div>
+          <div class="stat-value" id="statConfirmedCount">0</div>
+          <div class="stat-foot">Approved for recruitment cohort</div>
+        </div>
+
+        <!-- Rejected -->
+        <div class="stat-card stat-rejected">
+          <div class="stat-header">
+            <span class="stat-label">Rejected</span>
+            <div class="stat-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </div>
+          </div>
+          <div class="stat-value" id="statRejectedCount">0</div>
+          <div class="stat-foot">Does not meet current criteria</div>
+        </div>
+
+      </section>
+
+      <!-- Registrations Control & Table Card -->
+      <section class="table-control-card">
+        
+        <!-- Search & Filter Bar -->
+        <div class="table-toolbar">
+          <div class="search-box-wrap">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input 
+              type="text" 
+              id="tableSearchInput" 
+              class="search-input" 
+              placeholder="Search by name, surname, ID, Telegram, or phone..."
+            >
+          </div>
+
+          <div class="filter-group">
+            <label for="statusFilter" class="filter-label">Status:</label>
+            <select id="statusFilter" class="filter-select">
+              <option value="All">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+
+            <label for="telegramFilter" class="filter-label">Telegram Delivery:</label>
+            <select id="telegramFilter" class="filter-select">
+              <option value="All">All</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Pending Linking">Pending Linking</option>
+              <option value="Failed">Failed (Retry Available)</option>
+              <option value="Not Sent">Not Sent</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="table-responsive">
+          <table class="registrations-table" aria-label="Student Registrations">
+            <thead>
+              <tr>
+                <th>Registration ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Telegram Username</th>
+                <th>Phone Number</th>
+                <th>Registration Date</th>
+                <th>Status</th>
+                <th>Telegram Delivery</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="registrationsTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+          <div id="tableEmptyState" class="empty-state" style="display: none;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <p>No registration records match your filter criteria.</p>
+          </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-bar">
+          <div id="paginationInfo">Showing 0 to 0 of 0 registrations</div>
+          <div class="pagination-controls">
+            <button type="button" class="btn-page" id="prevPageBtn">Previous</button>
+            <span id="pageNumbers" style="font-weight: 600; padding: 0 8px;">Page 1 of 1</span>
+            <button type="button" class="btn-page" id="nextPageBtn">Next</button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- =========================================================================
+       3. ADMIN CONFIRMATION MODAL (WITH TELEGRAM GROUP LINK & EXPIRY)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="confirmModal">
+    <div class="modal-card" style="max-width: 560px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirm Registration</h2>
+        <button type="button" class="modal-close-btn" id="closeConfirmModal" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Participant Summary Card -->
+        <div style="background: var(--ice); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+          <div style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Candidate Information</div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 18px; font-weight: 800; color: var(--navy);" id="cfmCandidateName">Candidate Name</div>
+            <span class="ref-badge" id="cfmRegistrationId">EPIC-2026-XXXX</span>
+          </div>
+
+          <!-- Telegram Account Linking Status -->
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <span style="font-size: 12.5px; color: var(--text-muted); font-weight: 600;">Telegram Identity:</span>
+            <div id="cfmLinkingStatusBadge">
+              <!-- Linked or Pending badge rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Warning / Notice if not linked -->
+        <div id="cfmLinkingWarning" style="display: none; background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber-text); padding: 12px 14px; border-radius: var(--radius-md); font-size: 12.5px; margin-bottom: 20px; line-height: 1.45;">
+          <strong>Notice:</strong> This participant has not started the official Telegram bot yet. A unique single-use invitation link (member_limit=1) will be generated. Once the candidate opens the bot, the invite will be delivered automatically, or you can copy the link from their details.
+          <div style="margin-top: 8px;">
+            <button type="button" class="btn-act" id="btnSimulateLinkInModal" style="font-size: 11.5px; height: 26px;">
+              ⚡ Simulate Bot Connection for Testing
+            </button>
+          </div>
+        </div>
+
+        <!-- Form Fields -->
+        <form id="confirmationForm" style="display: flex; flex-direction: column; gap: 16px;">
+          
+          <!-- Target Telegram Group / Channel Identifier (REQUIRED) -->
+          <div class="form-field">
+            <label for="cfmTargetChatId">
+              Target Telegram Group or Channel Identifier/Link <span style="color: var(--cyan); font-weight: 700;">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="cfmTargetChatId" 
+              class="form-input" 
+              placeholder="e.g. -1002345678901 or @epic_recruitment_2026" 
+              required
+            >
+            <span style="font-size: 11.5px; color: var(--text-subtle);">
+              Must be a Telegram group or channel where the bot is an administrator with "Invite Users via Link" rights.
+            </span>
+          </div>
+
+          <!-- Expiry Time Configuration (Optional/Configurable) -->
+          <div class="form-field">
+            <label for="cfmExpiryHours">Invitation Link Expiry</label>
+            <select id="cfmExpiryHours" class="filter-select" style="height: 42px; width: 100%;">
+              <option value="24">24 Hours (1 Day)</option>
+              <option value="48" selected>48 Hours (2 Days — Recommended)</option>
+              <option value="72">72 Hours (3 Days)</option>
+              <option value="168">7 Days (1 Week)</option>
+              <option value="0">No Expiry</option>
+            </select>
+            <span style="font-size: 11.5px; color: var(--text-subtle);">
+              The single-use invitation link will automatically expire after this duration.
+            </span>
+          </div>
+
+          <!-- Optional Administrative Note -->
+          <div class="form-field">
+            <label for="cfmNote">Internal Confirmation Note (Optional)</label>
+            <input 
+              type="text" 
+              id="cfmNote" 
+              class="form-input" 
+              placeholder="e.g. Document verified, accepted to cohort"
+            >
+          </div>
+
+        </form>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-act" id="btnCancelConfirm" style="height: 38px; padding: 0 16px; font-size: 13px;">
+          Cancel
+        </button>
+        <button type="button" class="btn-act btn-act-confirm" id="btnSubmitConfirm" style="height: 38px; padding: 0 20px; font-size: 13.5px; font-weight: 700;">
+          <span id="cfmSubmitText">Confirm & Send Invitation</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       4. DETAILED REGISTRATION VIEW MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="detailModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="detailModalTitle">Registration Details</h2>
+        <button type="button" class="modal-close-btn" id="closeDetailModal" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Candidate Profile -->
+        <div class="detail-section-title">Candidate Profile</div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-k">Registration ID</span>
+            <span class="detail-v" id="dtId" style="font-family: var(--font-mono); color: var(--cyan);">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Full Name</span>
+            <span class="detail-v" id="dtFullName">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Telegram Username</span>
+            <span class="detail-v" id="dtTelegram">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Phone Number</span>
+            <span class="detail-v" id="dtPhone">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Current Status</span>
+            <span class="detail-v" id="dtStatus">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Submission Time</span>
+            <span class="detail-v" id="dtDate">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Field of Study</span>
+            <span class="detail-v" id="dtFieldOfStudy" style="font-weight: 600; color: var(--navy);">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Academic Year</span>
+            <span class="detail-v" id="dtAcademicYear">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Student Matricule</span>
+            <span class="detail-v" id="dtMatricule">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Primary Department</span>
+            <span class="detail-v" id="dtPrimaryDept" style="font-weight: 700; color: var(--cyan);">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-k">Secondary Department</span>
+            <span class="detail-v" id="dtSecondaryDept">-</span>
+          </div>
+          <div class="detail-item" style="grid-column: 1 / -1;">
+            <span class="detail-k">Motivation / Interests</span>
+            <span class="detail-v" id="dtMotivation" style="font-style: italic; white-space: pre-wrap; line-height: 1.5;">-</span>
+          </div>
+        </div>
+
+        <!-- Telegram Identity & Account Linking Card -->
+        <div class="detail-section-title">Telegram Identity & Connection</div>
+        <div style="background: var(--ice); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 22px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <span style="font-size: 13px; font-weight: 700; color: var(--navy);">Bot Account Connection:</span>
+              <div id="dtLinkingBadge" style="margin-top: 4px;">-</div>
+            </div>
+            <div id="dtChatIdDisplay" style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
+              Chat ID: None
+            </div>
+          </div>
+          <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <a id="dtDeepLinkAnchor" href="#" target="_blank" rel="noopener" class="btn-act" style="text-decoration: none; font-size: 11.5px; height: 28px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+              Candidate Deep Link
+            </a>
+            <button type="button" class="btn-act" id="btnCopyDeepLink" style="font-size: 11.5px; height: 28px;">
+              Copy Deep Link
+            </button>
+            <button type="button" class="btn-act" id="btnSimulateLinkInDetail" style="font-size: 11.5px; height: 28px;">
+              ⚡ Simulate Connection
+            </button>
+          </div>
+        </div>
+
+        <!-- Telegram Invitation Metadata (if Confirmed) -->
+        <div id="dtInvitationCard" style="display: none; background: #FFFFFF; border: 1.5px solid #C8E6C9; border-radius: var(--radius-md); padding: 18px; margin-bottom: 22px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <div style="font-size: 12.5px; font-weight: 700; text-transform: uppercase; color: #2E7D32; display: flex; align-items: center; gap: 6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Single-Use Invitation Metadata (member_limit = 1)
+            </div>
+            <span id="dtInviteDeliveryBadge">-</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Link:</span>
+              <code id="dtInviteLinkCode" style="font-family: var(--font-mono); font-size: 13px; color: var(--cyan); background: var(--ice); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color); word-break: break-all;">-</code>
+              <button type="button" class="btn-act" id="btnCopyInviteLink" style="height: 26px; font-size: 11.5px;">Copy</button>
+            </div>
+
+            <div style="font-size: 12px; color: var(--text-muted); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px;">
+              <div>Target: <strong id="dtInviteTarget">-</strong></div>
+              <div>Expiry: <strong id="dtInviteExpiry">-</strong></div>
+            </div>
+
+            <!-- Delivery Error if any -->
+            <div id="dtDeliveryErrorBox" style="display: none; margin-top: 8px; padding: 10px; background: var(--red-bg); border: 1px solid var(--red-border); border-radius: var(--radius-xs); font-size: 12px; color: var(--red);">
+              <strong>Delivery Error:</strong> <span id="dtDeliveryErrorText">-</span>
+            </div>
+
+            <!-- Retry Delivery button -->
+            <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+              <button type="button" class="btn-act btn-act-confirm" id="btnRetryInvitation" style="height: 30px; font-size: 12px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                Retry Private Telegram Delivery
+              </button>
+              <button type="button" class="btn-act btn-act-reject" id="btnRevokeInvitation" style="height: 30px; font-size: 12px;">
+                Revoke Invite Link
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rejection Reason if any -->
+        <div id="dtRejectionWrap" style="display: none; margin-bottom: 20px; padding: 12px 16px; background: var(--red-bg); border: 1px solid var(--red-border); border-radius: var(--radius-md);">
+          <div style="font-size: 12px; font-weight: 700; color: var(--red); text-transform: uppercase;">Rejection Reason</div>
+          <div id="dtRejectionReason" style="font-size: 13.5px; color: #901B00; margin-top: 4px;">-</div>
+        </div>
+
+        <!-- Audit History & Timestamps -->
+        <div class="detail-section-title">Audit Log & Confirmation History</div>
+        <div class="history-timeline" id="dtHistoryTimeline">
+          <!-- Rendered dynamically -->
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-act btn-act-reject" id="btnModalReject" style="height: 38px; padding: 0 16px; font-size: 13px;">
+          Mark as Rejected
+        </button>
+        <button type="button" class="btn-act btn-act-confirm" id="btnModalConfirm" style="height: 38px; padding: 0 16px; font-size: 13px;">
+          Confirm Registration
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       5. REJECTION REASON PROMPT MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="rejectPromptModal">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Reject Registration</h3>
+        <button type="button" class="modal-close-btn" id="closeRejectPromptModal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 14px;">
+          Please enter an internal administrative reason for rejecting registration <strong id="rejectModalRegId" style="color:var(--navy);">-</strong>:
+        </p>
+        <div class="form-field">
+          <textarea 
+            id="rejectionReasonInput" 
+            class="form-input" 
+            style="height: 90px; padding: 10px; resize: vertical;" 
+            placeholder="e.g. Incomplete application profile, non-medical faculty applicant, or recruitment quota reached."
+          ></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-act" id="btnCancelReject">Cancel</button>
+        <button type="button" class="btn-act btn-act-reject" id="btnConfirmReject" style="height: 36px; padding: 0 16px;">
+          Confirm Rejection
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       6. TELEGRAM SETTINGS MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Telegram Bot Settings</h3>
+        <button type="button" class="modal-close-btn" id="closeSettingsModal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="settingsForm" style="display: flex; flex-direction: column; gap: 16px;">
+          
+          <div class="form-field">
+            <label for="cfgBotToken">Telegram Bot Token</label>
+            <input type="password" id="cfgBotToken" class="form-input" placeholder="Paste bot token from @BotFather">
+            <span id="cfgTokenStatus" style="font-size: 11.5px; color: var(--text-subtle);"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="cfgBotUsername">Bot Username</label>
+            <input type="text" id="cfgBotUsername" class="form-input" placeholder="epic_club_setif_bot">
+            <span style="font-size: 11.5px; color: var(--text-subtle);">Used to construct deep links: t.me/bot?start=link_ID</span>
+          </div>
+
+          <div class="form-field">
+            <label for="cfgDefaultGroup">Default Target Group / Channel ID</label>
+            <input type="text" id="cfgDefaultGroup" class="form-input" placeholder="-1002345678901 or @epicclub_cohort_2026">
+            <span style="font-size: 11.5px; color: var(--text-subtle);">Pre-filled when confirming registrations.</span>
+          </div>
+
+          <div class="form-field">
+            <label for="cfgDefaultExpiry">Default Link Expiry (Hours)</label>
+            <input type="number" id="cfgDefaultExpiry" class="form-input" placeholder="48" min="0" max="720">
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-act" id="btnCancelSettings">Close</button>
+        <button type="button" class="btn-act btn-act-confirm" id="btnSaveSettings" style="height: 36px; padding: 0 16px;">
+          Save Settings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-msg" id="toastMsg">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastText">Action successful.</span>
+  </div>
+
+  <!-- =========================================================================
+       CLIENT-SIDE JAVASCRIPT & SECURE WORKFLOWS
+       ========================================================================= -->
+  <script>
+    (function() {
+      let authToken = localStorage.getItem('epic_admin_token') || null;
+      let currentUser = null;
+      let currentPage = 1;
+      const pageSize = 10;
+      let currentActiveRecord = null;
+      let targetRejectId = null;
+      let targetConfirmRecord = null;
+      let systemSettings = { telegramBotUsername: 'epic_club_setif_bot', defaultTargetChatId: '-1002345678901' };
+
+      // DOM Elements
+      const loginView = document.getElementById('loginView');
+      const dashboardView = document.getElementById('dashboardView');
+      const loginForm = document.getElementById('adminLoginForm');
+      const loginUsername = document.getElementById('adminUsername');
+      const loginPassword = document.getElementById('adminPassword');
+      const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+      const loginAlert = document.getElementById('loginAlert');
+      const navAdminName = document.getElementById('navAdminName');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const refreshBtn = document.getElementById('refreshBtn');
+
+      const statTotalCount = document.getElementById('statTotalCount');
+      const statPendingCount = document.getElementById('statPendingCount');
+      const statConfirmedCount = document.getElementById('statConfirmedCount');
+      const statRejectedCount = document.getElementById('statRejectedCount');
+
+      const tableSearchInput = document.getElementById('tableSearchInput');
+      const statusFilter = document.getElementById('statusFilter');
+      const telegramFilter = document.getElementById('telegramFilter');
+      const registrationsTableBody = document.getElementById('registrationsTableBody');
+      const tableEmptyState = document.getElementById('tableEmptyState');
+      const paginationInfo = document.getElementById('paginationInfo');
+      const prevPageBtn = document.getElementById('prevPageBtn');
+      const nextPageBtn = document.getElementById('nextPageBtn');
+      const pageNumbers = document.getElementById('pageNumbers');
+
+      // Confirmation Modal Elements
+      const confirmModal = document.getElementById('confirmModal');
+      const closeConfirmModal = document.getElementById('closeConfirmModal');
+      const btnCancelConfirm = document.getElementById('btnCancelConfirm');
+      const btnSubmitConfirm = document.getElementById('btnSubmitConfirm');
+      const cfmCandidateName = document.getElementById('cfmCandidateName');
+      const cfmRegistrationId = document.getElementById('cfmRegistrationId');
+      const cfmLinkingStatusBadge = document.getElementById('cfmLinkingStatusBadge');
+      const cfmLinkingWarning = document.getElementById('cfmLinkingWarning');
+      const cfmTargetChatId = document.getElementById('cfmTargetChatId');
+      const cfmExpiryHours = document.getElementById('cfmExpiryHours');
+      const cfmNote = document.getElementById('cfmNote');
+      const cfmSubmitText = document.getElementById('cfmSubmitText');
+      const btnSimulateLinkInModal = document.getElementById('btnSimulateLinkInModal');
+
+      // Detail Modal Elements
+      const detailModal = document.getElementById('detailModal');
+      const closeDetailModal = document.getElementById('closeDetailModal');
+      const dtId = document.getElementById('dtId');
+      const dtFullName = document.getElementById('dtFullName');
+      const dtTelegram = document.getElementById('dtTelegram');
+      const dtPhone = document.getElementById('dtPhone');
+      const dtStatus = document.getElementById('dtStatus');
+      const dtDate = document.getElementById('dtDate');
+      const dtLinkingBadge = document.getElementById('dtLinkingBadge');
+      const dtChatIdDisplay = document.getElementById('dtChatIdDisplay');
+      const dtDeepLinkAnchor = document.getElementById('dtDeepLinkAnchor');
+      const btnCopyDeepLink = document.getElementById('btnCopyDeepLink');
+      const btnSimulateLinkInDetail = document.getElementById('btnSimulateLinkInDetail');
+      const dtInvitationCard = document.getElementById('dtInvitationCard');
+      const dtInviteDeliveryBadge = document.getElementById('dtInviteDeliveryBadge');
+      const dtInviteLinkCode = document.getElementById('dtInviteLinkCode');
+      const btnCopyInviteLink = document.getElementById('btnCopyInviteLink');
+      const dtInviteTarget = document.getElementById('dtInviteTarget');
+      const dtInviteExpiry = document.getElementById('dtInviteExpiry');
+      const dtDeliveryErrorBox = document.getElementById('dtDeliveryErrorBox');
+      const dtDeliveryErrorText = document.getElementById('dtDeliveryErrorText');
+      const btnRetryInvitation = document.getElementById('btnRetryInvitation');
+      const btnRevokeInvitation = document.getElementById('btnRevokeInvitation');
+      const dtRejectionWrap = document.getElementById('dtRejectionWrap');
+      const dtRejectionReason = document.getElementById('dtRejectionReason');
+      const dtHistoryTimeline = document.getElementById('dtHistoryTimeline');
+      const btnModalReject = document.getElementById('btnModalReject');
+      const btnModalConfirm = document.getElementById('btnModalConfirm');
+
+      // Reject Modal Elements
+      const rejectPromptModal = document.getElementById('rejectPromptModal');
+      const closeRejectPromptModal = document.getElementById('closeRejectPromptModal');
+      const btnCancelReject = document.getElementById('btnCancelReject');
+      const btnConfirmReject = document.getElementById('btnConfirmReject');
+      const rejectionReasonInput = document.getElementById('rejectionReasonInput');
+      const rejectModalRegId = document.getElementById('rejectModalRegId');
+
+      // Settings Modal Elements
+      const settingsModal = document.getElementById('settingsModal');
+      const btnOpenSettings = document.getElementById('btnOpenSettings');
+      const closeSettingsModal = document.getElementById('closeSettingsModal');
+      const btnCancelSettings = document.getElementById('btnCancelSettings');
+      const btnSaveSettings = document.getElementById('btnSaveSettings');
+      const cfgBotToken = document.getElementById('cfgBotToken');
+      const cfgBotUsername = document.getElementById('cfgBotUsername');
+      const cfgDefaultGroup = document.getElementById('cfgDefaultGroup');
+      const cfgDefaultExpiry = document.getElementById('cfgDefaultExpiry');
+      const cfgTokenStatus = document.getElementById('cfgTokenStatus');
+
+      const toastMsg = document.getElementById('toastMsg');
+      const toastText = document.getElementById('toastText');
+
+      function showToast(msg, type) {
+        toastText.textContent = msg;
+        toastMsg.classList.remove('toast-warning', 'toast-error', 'toast-success');
+        if (type === 'warning') toastMsg.classList.add('toast-warning');
+        else if (type === 'error') toastMsg.classList.add('toast-error');
+        else if (type === 'success') toastMsg.classList.add('toast-success');
+        toastMsg.classList.add('active');
+        const duration = (type === 'warning' || type === 'error') ? 6000 : 3500;
+        setTimeout(() => toastMsg.classList.remove('active'), duration);
+      }
+
+      function getAuthHeaders() {
+        return {
+          'Content-Type': 'application/json',
+          'Authorization': authToken ? `Bearer ${authToken}` : ''
+        };
+      }
+
+      function formatDate(isoStr) {
+        if (!isoStr) return '-';
+        try {
+          const d = new Date(isoStr);
+          return d.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        } catch (e) {
+          return isoStr;
+        }
+      }
+
+      // Check current auth status on load
+      async function checkAuth() {
+        if (!authToken) {
+          showLogin();
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/admin/me', {
+            headers: getAuthHeaders()
+          });
+
+          if (!res.ok) {
+            throw new Error('Session invalid');
+          }
+
+          const data = await res.json();
+          if (data.success && data.user) {
+            currentUser = data.user;
+            showDashboard();
+          } else {
+            throw new Error('Session unauthorized');
+          }
+        } catch (e) {
+          localStorage.removeItem('epic_admin_token');
+          authToken = null;
+          showLogin();
+        }
+      }
+
+      function showLogin() {
+        loginView.style.display = 'flex';
+        dashboardView.style.display = 'none';
+        loginAlert.style.display = 'none';
+      }
+
+      async function showDashboard() {
+        loginView.style.display = 'none';
+        dashboardView.style.display = 'flex';
+        navAdminName.textContent = currentUser ? `${currentUser.username} (${currentUser.role || 'Admin'})` : 'Admin';
+        await loadSettings();
+        loadRegistrations();
+      }
+
+      async function loadSettings() {
+        try {
+          const res = await fetch('/api/admin/settings', { headers: getAuthHeaders() });
+          const data = await res.json();
+          if (data.success && data.settings) {
+            systemSettings = data.settings;
+            cfgBotUsername.value = data.settings.telegramBotUsername || 'epic_club_setif_bot';
+            cfgDefaultGroup.value = data.settings.defaultTargetChatId || '-1002345678901';
+            cfgDefaultExpiry.value = data.settings.defaultExpiryHours || 48;
+            if (data.settings.hasBotToken) {
+              try {
+                const stRes = await fetch('/api/admin/telegram/status', { headers: getAuthHeaders() });
+                const stData = await stRes.json();
+                if (stData.success && stData.bot) {
+                  const modeText = stData.mode === 'polling' ? '⚡ Active Long-Polling' : (stData.mode === 'webhook' ? '🌐 Active Webhook' : 'Idle');
+                  cfgTokenStatus.textContent = `🟢 Bot: @${stData.bot.username} (${stData.bot.first_name}) • ${modeText}`;
+                  cfgTokenStatus.style.color = '#2E7D32';
+                } else {
+                  cfgTokenStatus.textContent = `Active Token: ${data.settings.maskedToken}`;
+                  cfgTokenStatus.style.color = '#2E7D32';
+                }
+              } catch (_) {
+                cfgTokenStatus.textContent = `Active Token: ${data.settings.maskedToken}`;
+                cfgTokenStatus.style.color = '#2E7D32';
+              }
+            } else {
+              cfgTokenStatus.textContent = 'No token set (Operating in deterministic Sandbox / Simulator mode)';
+              cfgTokenStatus.style.color = '#974F0C';
+            }
+          }
+        } catch (e) {}
+      }
+
+      // Login Form Submission
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        loginAlert.style.display = 'none';
+        loginSubmitBtn.disabled = true;
+
+        const username = loginUsername.value.trim();
+        const password = loginPassword.value;
+
+        try {
+          const res = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+
+          const data = await res.json();
+          if (!res.ok || !data.success) {
+            throw new Error(data.error || 'Authentication failed');
+          }
+
+          authToken = data.token;
+          currentUser = data.user;
+          localStorage.setItem('epic_admin_token', data.token);
+          loginForm.reset();
+          showDashboard();
+          showToast(`Welcome back, ${currentUser.username}!`);
+        } catch (err) {
+          loginAlert.textContent = err.message || 'Invalid username or password';
+          loginAlert.style.display = 'block';
+        } finally {
+          loginSubmitBtn.disabled = false;
+        }
+      });
+
+      // Logout
+      logoutBtn.addEventListener('click', async function() {
+        try {
+          await fetch('/api/admin/logout', {
+            method: 'POST',
+            headers: getAuthHeaders()
+          });
+        } catch (e) {}
+
+        localStorage.removeItem('epic_admin_token');
+        authToken = null;
+        currentUser = null;
+        showLogin();
+      });
+
+      // Fetch & Render Registrations
+      function showTableSkeleton() {
+        registrationsTableBody.innerHTML = '';
+        tableEmptyState.style.display = 'none';
+        for (let i = 0; i < 5; i++) {
+          const tr = document.createElement('tr');
+          tr.className = 'table-loading-row';
+          tr.innerHTML = `
+            <td><div class="skeleton-cell" style="width:110px"></div></td>
+            <td><div class="skeleton-cell" style="width:80px"></div></td>
+            <td><div class="skeleton-cell" style="width:90px"></div></td>
+            <td><div class="skeleton-cell" style="width:100px"></div></td>
+            <td><div class="skeleton-cell" style="width:100px"></div></td>
+            <td><div class="skeleton-cell" style="width:90px"></div></td>
+            <td><div class="skeleton-cell" style="width:70px"></div></td>
+            <td><div class="skeleton-cell" style="width:80px"></div></td>
+            <td><div class="skeleton-cell" style="width:120px; margin-left:auto"></div></td>
+          `;
+          registrationsTableBody.appendChild(tr);
+        }
+      }
+
+      async function loadRegistrations() {
+        const search = tableSearchInput.value.trim();
+        const status = statusFilter.value;
+        const telegramStatus = telegramFilter.value;
+
+        const params = new URLSearchParams({
+          search: search,
+          status: status,
+          telegramStatus: telegramStatus,
+          page: currentPage.toString(),
+          limit: pageSize.toString()
+        });
+
+        showTableSkeleton();
+
+        try {
+          const res = await fetch(`/api/admin/registrations?${params.toString()}`, {
+            headers: getAuthHeaders()
+          });
+
+          if (res.status === 401) {
+            localStorage.removeItem('epic_admin_token');
+            authToken = null;
+            showLogin();
+            return;
+          }
+
+          const result = await res.json();
+          if (!result.success) {
+            throw new Error(result.error || 'Failed to load registrations');
+          }
+
+          if (result.summary) {
+            statTotalCount.textContent = result.summary.total || 0;
+            statPendingCount.textContent = result.summary.pending || 0;
+            statConfirmedCount.textContent = result.summary.confirmed || 0;
+            statRejectedCount.textContent = result.summary.rejected || 0;
+          }
+
+          renderTable(result.data, result.totalCount, result.page, result.totalPages);
+        } catch (err) {
+          console.error('Error loading registrations:', err);
+          registrationsTableBody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 32px; color: var(--red); font-size: 13px; font-weight: 600;">⚠ Failed to load registrations. <button onclick="loadRegistrations()" style="margin-left:8px; cursor:pointer; color: var(--cyan); background:none; border:none; font-weight:700; text-decoration:underline;">Retry</button></td></tr>`;
+        }
+      }
+
+      function renderTable(items, totalCount, page, totalPages) {
+        registrationsTableBody.innerHTML = '';
+
+        if (!items || items.length === 0) {
+          tableEmptyState.style.display = 'block';
+          paginationInfo.textContent = 'Showing 0 to 0 of 0 registrations';
+          pageNumbers.textContent = 'Page 1 of 1';
+          prevPageBtn.disabled = true;
+          nextPageBtn.disabled = true;
+          return;
+        }
+
+        tableEmptyState.style.display = 'none';
+
+        const startIdx = (page - 1) * pageSize + 1;
+        const endIdx = Math.min(startIdx + items.length - 1, totalCount);
+        paginationInfo.textContent = `Showing ${startIdx} to ${endIdx} of ${totalCount} registrations`;
+        pageNumbers.textContent = `Page ${page} of ${totalPages}`;
+        prevPageBtn.disabled = page <= 1;
+        nextPageBtn.disabled = page >= totalPages;
+
+        items.forEach(r => {
+          const tr = document.createElement('tr');
+          const statusLower = (r.status || 'Pending').toLowerCase();
+          const teleStatus = r.telegramInviteStatus || 'Not Sent';
+          const teleLower = teleStatus.toLowerCase().replace(/\s+/g, '-');
+
+          let teleDeliveryHtml = `<span class="tele-status-badge tele-${teleLower}">${escapeHtml(teleStatus)}</span>`;
+          if (r.telegramLinked) {
+            teleDeliveryHtml += ` <span class="account-linked-pill" title="Chat ID: ${r.telegramChatId}">Linked ✓</span>`;
+          } else {
+            teleDeliveryHtml += ` <span class="account-pending-pill" title="Candidate hasn't started bot">Unlinked</span>`;
+          }
+
+          tr.innerHTML = `
+            <td><span class="ref-badge">${escapeHtml(r.id)}</span></td>
+            <td><strong>${escapeHtml(r.firstName)}</strong></td>
+            <td><strong>${escapeHtml(r.lastName)}</strong></td>
+            <td>
+              <a href="https://t.me/${encodeURIComponent(r.telegramUsername)}" target="_blank" rel="noopener" class="telegram-link">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                @${escapeHtml(r.telegramUsername)}
+              </a>
+            </td>
+            <td>${escapeHtml(r.phoneNumber)}</td>
+            <td style="color: var(--text-muted); font-size: 12.5px;">${formatDate(r.createdAt)}</td>
+            <td>
+              <span class="status-pill status-${statusLower}">
+                <span class="dot-indicator"></span>
+                <span>${escapeHtml(r.status || 'Pending')}</span>
+              </span>
+            </td>
+            <td>
+              ${teleDeliveryHtml}
+            </td>
+            <td style="text-align: right;">
+              <div class="action-btn-group" style="justify-content: flex-end;">
+                <button type="button" class="btn-act btn-view-detail" data-id="${escapeHtml(r.id)}">
+                  View
+                </button>
+                ${r.status !== 'Confirmed' ? `
+                  <button type="button" class="btn-act btn-act-confirm btn-open-confirm" data-id="${escapeHtml(r.id)}">
+                    Confirm
+                  </button>
+                ` : `
+                  <button type="button" class="btn-act btn-open-confirm" data-id="${escapeHtml(r.id)}" title="Re-issue or send new invite">
+                    Manage Invite
+                  </button>
+                `}
+                ${r.status !== 'Rejected' ? `
+                  <button type="button" class="btn-act btn-act-reject btn-quick-reject" data-id="${escapeHtml(r.id)}">
+                    Reject
+                  </button>
+                ` : ''}
+              </div>
+            </td>
+          `;
+
+          registrationsTableBody.appendChild(tr);
+        });
+
+        // Event listeners
+        document.querySelectorAll('.btn-view-detail').forEach(btn => {
+          btn.addEventListener('click', () => openDetailModal(btn.dataset.id));
+        });
+        document.querySelectorAll('.btn-open-confirm').forEach(btn => {
+          btn.addEventListener('click', () => openConfirmModal(btn.dataset.id));
+        });
+        document.querySelectorAll('.btn-quick-reject').forEach(btn => {
+          btn.addEventListener('click', () => openRejectPrompt(btn.dataset.id));
+        });
+      }
+
+      // =========================================================================
+      // CONFIRMATION MODAL WORKFLOW
+      // =========================================================================
+      async function openConfirmModal(regId) {
+        try {
+          const res = await fetch(`/api/admin/registrations/${regId}`, { headers: getAuthHeaders() });
+          const result = await res.json();
+          if (!result.success || !result.registration) throw new Error('Record not found');
+
+          const r = result.registration;
+          targetConfirmRecord = r;
+
+          cfmCandidateName.textContent = `${r.firstName} ${r.lastName}`;
+          cfmRegistrationId.textContent = r.id;
+
+          // Target group prefill: existing invite target > system default > hard fallback
+          const prefillTarget = (r.invitation && r.invitation.targetChatId && r.invitation.targetChatId.trim())
+            || (systemSettings && systemSettings.defaultTargetChatId && systemSettings.defaultTargetChatId.trim())
+            || '-1002345678901';
+          cfmTargetChatId.value = prefillTarget;
+
+          // Expiry prefill synced with system settings
+          const prefillExpiry = systemSettings && systemSettings.defaultExpiryHours != null
+            ? String(systemSettings.defaultExpiryHours)
+            : '48';
+          // Try to set matching option; default to 48h if not found
+          const expiryOpts = Array.from(cfmExpiryHours.options).map(o => o.value);
+          cfmExpiryHours.value = expiryOpts.includes(prefillExpiry) ? prefillExpiry : '48';
+
+          cfmNote.value = '';
+
+          // Account linking status in modal
+          if (r.telegramLinked && r.telegramChatId) {
+            cfmLinkingStatusBadge.innerHTML = `
+              <span class="account-linked-pill" style="font-size: 12px; padding: 4px 10px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Account Linked &mdash; Chat ID: ${r.telegramChatId}
+              </span>
+            `;
+            cfmLinkingWarning.style.display = 'none';
+          } else {
+            cfmLinkingStatusBadge.innerHTML = `
+              <span class="account-pending-pill" style="font-size: 12px; padding: 4px 10px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line></svg>
+                Not Yet Linked — invitation will be queued
+              </span>
+            `;
+            cfmLinkingWarning.style.display = 'block';
+          }
+
+          cfmSubmitText.textContent = r.status === 'Confirmed' ? 'Re-confirm & Re-send Invite' : 'Confirm & Send Invitation';
+          confirmModal.classList.add('active');
+        } catch (e) {
+          showToast('Unable to open confirmation modal: ' + e.message, 'error');
+        }
+      }
+
+      btnSubmitConfirm.addEventListener('click', async function() {
+        if (!targetConfirmRecord) return;
+
+        const targetChatId = cfmTargetChatId.value.trim();
+        if (!targetChatId) {
+          cfmTargetChatId.style.borderColor = 'var(--red)';
+          cfmTargetChatId.focus();
+          cfmTargetChatId.addEventListener('input', function onInput() {
+            cfmTargetChatId.style.borderColor = '';
+            cfmTargetChatId.removeEventListener('input', onInput);
+          });
+          return;
+        }
+
+        const expiryHours = cfmExpiryHours.value;
+        const note = cfmNote.value.trim();
+        const prevBtnText = cfmSubmitText.textContent;
+
+        btnSubmitConfirm.disabled = true;
+        cfmSubmitText.textContent = 'Generating Invitation…';
+
+        try {
+          const res = await fetch(`/api/admin/registrations/${targetConfirmRecord.id}/confirm`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+              targetChatId: targetChatId,
+              expiryHours: expiryHours,
+              note: note
+            })
+          });
+
+          const result = await res.json();
+          if (!result.success) throw new Error(result.error || 'Confirmation failed');
+
+          confirmModal.classList.remove('active');
+          loadRegistrations();
+
+          // Surface partial success (invite generated but not yet delivered)
+          if (result.warning) {
+            showToast('⚠ ' + result.warning, 'warning');
+          } else {
+            const deliveryStatus = result.deliveryStatus || '';
+            if (deliveryStatus === 'Delivered') {
+              showToast('✓ Registration confirmed & invitation delivered via Telegram!', 'success');
+            } else if (deliveryStatus === 'Pending Linking') {
+              showToast('✓ Confirmed. Invite generated — awaiting participant Telegram link.', 'warning');
+            } else {
+              showToast(result.message || `Registration ${targetConfirmRecord.id} confirmed.`, 'success');
+            }
+          }
+
+          if (detailModal.classList.contains('active') && currentActiveRecord && currentActiveRecord.id === targetConfirmRecord.id) {
+            openDetailModal(targetConfirmRecord.id);
+          }
+        } catch (err) {
+          showToast('Confirmation Error: ' + err.message, 'error');
+        } finally {
+          btnSubmitConfirm.disabled = false;
+          cfmSubmitText.textContent = prevBtnText;
+        }
+      });
+
+      closeConfirmModal.addEventListener('click', () => confirmModal.classList.remove('active'));
+      btnCancelConfirm.addEventListener('click', () => confirmModal.classList.remove('active'));
+      // Close modal on backdrop click
+      confirmModal.addEventListener('click', (e) => { if (e.target === confirmModal) confirmModal.classList.remove('active'); });
+      detailModal.addEventListener('click', (e) => { if (e.target === detailModal) detailModal.classList.remove('active'); });
+      rejectPromptModal.addEventListener('click', (e) => { if (e.target === rejectPromptModal) rejectPromptModal.classList.remove('active'); });
+      settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.remove('active'); });
+
+      // Helper to simulate link inside confirmation modal
+      btnSimulateLinkInModal.addEventListener('click', async function() {
+        if (!targetConfirmRecord) return;
+        try {
+          const res = await fetch('/api/telegram/simulate-link', {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ registrationId: targetConfirmRecord.id })
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast('Telegram account linked in test mode!');
+            openConfirmModal(targetConfirmRecord.id);
+          }
+        } catch (e) {}
+      });
+
+      // =========================================================================
+      // DETAILED VIEW MODAL
+      // =========================================================================
+      async function openDetailModal(regId) {
+        try {
+          const res = await fetch(`/api/admin/registrations/${regId}`, { headers: getAuthHeaders() });
+          const result = await res.json();
+          if (!result.success || !result.registration) throw new Error('Record not found');
+
+          const r = result.registration;
+          currentActiveRecord = r;
+
+          dtId.textContent = r.id;
+          dtFullName.textContent = `${r.firstName} ${r.lastName}`;
+          dtTelegram.innerHTML = `
+            <a href="https://t.me/${encodeURIComponent(r.telegramUsername)}" target="_blank" rel="noopener" class="telegram-link">
+              @${escapeHtml(r.telegramUsername)}
+            </a>
+          `;
+          dtPhone.textContent = r.phoneNumber;
+          dtStatus.innerHTML = `
+            <span class="status-pill status-${r.status.toLowerCase()}">
+              <span class="dot-indicator"></span>
+              <span>${r.status}</span>
+            </span>
+          `;
+          dtDate.textContent = formatDate(r.createdAt);
+          dtFieldOfStudy.textContent = r.fieldOfStudy || 'Not specified';
+          dtAcademicYear.textContent = r.academicYear || 'Not specified';
+          dtMatricule.textContent = r.matricule || 'None';
+          dtPrimaryDept.textContent = r.primaryDepartment || 'General Application';
+          dtSecondaryDept.textContent = r.secondaryDepartment || 'None';
+          dtMotivation.textContent = r.motivation || 'No motivation statement provided.';
+
+          // Deep Link Info
+          const botUser = result.botUsername || systemSettings.telegramBotUsername || 'epic_club_setif_bot';
+          const deepLinkUrl = `https://t.me/${botUser}?start=${r.linkingToken || ('link_' + r.id)}`;
+          dtDeepLinkAnchor.href = deepLinkUrl;
+
+          // Linking status
+          if (r.telegramLinked && r.telegramChatId) {
+            dtLinkingBadge.innerHTML = `<span class="account-linked-pill">Linked (Verified) ✓</span>`;
+            dtChatIdDisplay.textContent = `Chat ID: ${r.telegramChatId}`;
+          } else {
+            dtLinkingBadge.innerHTML = `<span class="account-pending-pill">Pending Link</span>`;
+            dtChatIdDisplay.textContent = `Chat ID: None`;
+          }
+
+          // Invitation Card
+          if (r.invitation && r.invitation.inviteLink) {
+            dtInvitationCard.style.display = 'block';
+            dtInviteLinkCode.textContent = r.invitation.inviteLink;
+            dtInviteTarget.textContent = r.invitation.targetChatId || '-';
+            dtInviteExpiry.textContent = r.invitation.expireDate ? formatDate(new Date(r.invitation.expireDate * 1000).toISOString()) : 'No Expiry';
+
+            const dStatus = r.invitation.deliveryStatus || r.telegramInviteStatus || 'Not Sent';
+            const dLower = dStatus.toLowerCase().replace(/\s+/g, '-');
+            dtInviteDeliveryBadge.className = `tele-status-badge tele-${dLower}`;
+            dtInviteDeliveryBadge.textContent = `Delivery: ${dStatus}`;
+
+            if (r.invitation.deliveryError) {
+              dtDeliveryErrorText.textContent = r.invitation.deliveryError;
+              dtDeliveryErrorBox.style.display = 'block';
+            } else {
+              dtDeliveryErrorBox.style.display = 'none';
+            }
+
+            // Show retry for Failed, Pending Linking, and Revoked states
+            const retryableStatuses = ['Failed', 'Pending Linking', 'Revoked'];
+            btnRetryInvitation.style.display = retryableStatuses.includes(dStatus) ? 'inline-flex' : 'none';
+            // Only show revoke if there's an active (non-revoked) link
+            btnRevokeInvitation.style.display = (dStatus !== 'Revoked' && r.invitation && r.invitation.inviteLink) ? 'inline-flex' : 'none';
+          } else {
+            dtInvitationCard.style.display = 'none';
+          }
+
+          // Rejection reason
+          if (r.status === 'Rejected' && r.rejectionReason) {
+            dtRejectionReason.textContent = r.rejectionReason;
+            dtRejectionWrap.style.display = 'block';
+          } else {
+            dtRejectionWrap.style.display = 'none';
+          }
+
+          // Render History
+          renderHistory(r.history);
+
+          // Modal confirm / reject buttons
+          btnModalConfirm.textContent = r.status === 'Confirmed' ? 'Manage Invitation' : 'Confirm Registration';
+          btnModalReject.style.display = r.status === 'Rejected' ? 'none' : 'inline-flex';
+
+          detailModal.classList.add('active');
+        } catch (e) {
+          showToast('Unable to load registration details');
+        }
+      }
+
+      function renderHistory(history) {
+        dtHistoryTimeline.innerHTML = '';
+        if (!Array.isArray(history) || history.length === 0) {
+          dtHistoryTimeline.innerHTML = '<div style="font-size: 13px; color: var(--text-subtle);">No historical log entries found.</div>';
+          return;
+        }
+
+        const sorted = [...history].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        sorted.forEach(item => {
+          const node = document.createElement('div');
+          node.className = 'history-node';
+          node.innerHTML = `
+            <div class="history-header">
+              <span>${escapeHtml(item.action)}</span>
+              <span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">by ${escapeHtml(item.performedBy || 'System')}</span>
+            </div>
+            <div class="history-time">${formatDate(item.timestamp)}</div>
+            ${item.note ? `<div class="history-note">${escapeHtml(item.note)}</div>` : ''}
+          `;
+          dtHistoryTimeline.appendChild(node);
+        });
+      }
+
+      btnCopyInviteLink.addEventListener('click', function() {
+        const link = dtInviteLinkCode.textContent.trim();
+        if (link && link !== '-') {
+          navigator.clipboard.writeText(link).then(() => {
+            btnCopyInviteLink.textContent = 'Copied!';
+            setTimeout(() => btnCopyInviteLink.textContent = 'Copy', 2000);
+          });
+        }
+      });
+
+      btnCopyDeepLink.addEventListener('click', function() {
+        const link = dtDeepLinkAnchor.href;
+        if (link) {
+          navigator.clipboard.writeText(link).then(() => {
+            btnCopyDeepLink.textContent = 'Copied!';
+            setTimeout(() => btnCopyDeepLink.textContent = 'Copy Deep Link', 2000);
+          });
+        }
+      });
+
+      // Simulate connection in detail view
+      btnSimulateLinkInDetail.addEventListener('click', async function() {
+        if (!currentActiveRecord) return;
+        try {
+          const res = await fetch('/api/telegram/simulate-link', {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ registrationId: currentActiveRecord.id })
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast('Telegram account linked in test mode!');
+            openDetailModal(currentActiveRecord.id);
+            loadRegistrations();
+          }
+        } catch (e) {}
+      });
+
+      // Retry Telegram Invitation delivery
+      btnRetryInvitation.addEventListener('click', async function() {
+        if (!currentActiveRecord) return;
+        const origText = btnRetryInvitation.innerHTML;
+        btnRetryInvitation.disabled = true;
+        btnRetryInvitation.innerHTML = '<span style="opacity:.7">Sending…</span>';
+        try {
+          const res = await fetch(`/api/admin/registrations/${currentActiveRecord.id}/retry-invite`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({})
+          });
+          const result = await res.json();
+          if (result.success) {
+            showToast('✓ Invitation successfully delivered via Telegram!', 'success');
+          } else {
+            showToast('Retry failed: ' + (result.error || 'Unknown error'), 'error');
+          }
+          openDetailModal(currentActiveRecord.id);
+          loadRegistrations();
+        } catch (e) {
+          showToast('Network error during retry', 'error');
+        } finally {
+          btnRetryInvitation.disabled = false;
+          btnRetryInvitation.innerHTML = origText;
+        }
+      });
+
+      // Revoke Invitation link
+      btnRevokeInvitation.addEventListener('click', async function() {
+        if (!currentActiveRecord) return;
+        if (!confirm('Are you sure you want to revoke this single-use invitation link? The participant will need a new link to join.')) return;
+        const origText = btnRevokeInvitation.textContent;
+        btnRevokeInvitation.disabled = true;
+        btnRevokeInvitation.textContent = 'Revoking…';
+        try {
+          const res = await fetch(`/api/admin/registrations/${currentActiveRecord.id}/revoke-invite`, {
+            method: 'POST',
+            headers: getAuthHeaders()
+          });
+          const result = await res.json();
+          if (result.success) {
+            showToast('Invitation link revoked successfully.', 'warning');
+            openDetailModal(currentActiveRecord.id);
+            loadRegistrations();
+          } else {
+            showToast('Error: ' + (result.error || 'Could not revoke link.'), 'error');
+          }
+        } catch (e) {
+          showToast('Network error revoking invitation', 'error');
+        } finally {
+          btnRevokeInvitation.disabled = false;
+          btnRevokeInvitation.textContent = origText;
+        }
+      });
+
+      btnModalConfirm.addEventListener('click', () => {
+        if (currentActiveRecord) {
+          detailModal.classList.remove('active');
+          openConfirmModal(currentActiveRecord.id);
+        }
+      });
+      btnModalReject.addEventListener('click', () => {
+        if (currentActiveRecord) {
+          detailModal.classList.remove('active');
+          openRejectPrompt(currentActiveRecord.id);
+        }
+      });
+      closeDetailModal.addEventListener('click', () => detailModal.classList.remove('active'));
+
+      // =========================================================================
+      // REJECT WORKFLOW
+      // =========================================================================
+      function openRejectPrompt(regId) {
+        targetRejectId = regId;
+        rejectModalRegId.textContent = regId;
+        rejectionReasonInput.value = '';
+        rejectPromptModal.classList.add('active');
+      }
+
+      btnConfirmReject.addEventListener('click', async function() {
+        if (!targetRejectId) return;
+        const reason = rejectionReasonInput.value.trim();
+        btnConfirmReject.disabled = true;
+
+        try {
+          const res = await fetch(`/api/admin/registrations/${targetRejectId}/reject`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ reason: reason })
+          });
+          const result = await res.json();
+          if (!result.success) throw new Error(result.error);
+
+          showToast(`Registration ${targetRejectId} has been rejected.`, 'warning');
+          rejectPromptModal.classList.remove('active');
+          loadRegistrations();
+
+          if (detailModal.classList.contains('active') && currentActiveRecord && currentActiveRecord.id === targetRejectId) {
+            openDetailModal(targetRejectId);
+          }
+        } catch (err) {
+          showToast(err.message || 'Error rejecting registration', 'error');
+        } finally {
+          btnConfirmReject.disabled = false;
+        }
+      });
+
+      closeRejectPromptModal.addEventListener('click', () => rejectPromptModal.classList.remove('active'));
+      btnCancelReject.addEventListener('click', () => rejectPromptModal.classList.remove('active'));
+
+      // =========================================================================
+      // TELEGRAM SETTINGS
+      // =========================================================================
+      btnOpenSettings.addEventListener('click', () => settingsModal.classList.add('active'));
+      closeSettingsModal.addEventListener('click', () => settingsModal.classList.remove('active'));
+      btnCancelSettings.addEventListener('click', () => settingsModal.classList.remove('active'));
+
+      btnSaveSettings.addEventListener('click', async function() {
+        const payload = {
+          telegramBotToken: cfgBotToken.value.trim(),
+          telegramBotUsername: cfgBotUsername.value.trim(),
+          defaultTargetChatId: cfgDefaultGroup.value.trim(),
+          defaultExpiryHours: cfgDefaultExpiry.value.trim()
+        };
+
+        btnSaveSettings.disabled = true;
+        try {
+          const res = await fetch('/api/admin/settings', {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast('Telegram Bot settings saved successfully!', 'success');
+            cfgBotToken.value = '';
+            settingsModal.classList.remove('active');
+            await loadSettings();
+          } else {
+            showToast('Failed to save: ' + (data.error || 'Unknown error'), 'error');
+          }
+        } catch (e) {
+          showToast('Network error saving settings', 'error');
+        } finally {
+          btnSaveSettings.disabled = false;
+        }
+      });
+
+      // Filter & Search events
+      let searchTimeout;
+      tableSearchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          currentPage = 1;
+          loadRegistrations();
+        }, 250);
+      });
+
+      statusFilter.addEventListener('change', () => {
+        currentPage = 1;
+        loadRegistrations();
+      });
+
+      telegramFilter.addEventListener('change', () => {
+        currentPage = 1;
+        loadRegistrations();
+      });
+
+      refreshBtn.addEventListener('click', () => { currentPage = 1; loadRegistrations(); });
+
+      prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          loadRegistrations();
+        }
+      });
+      nextPageBtn.addEventListener('click', () => {
+        currentPage++;
+        loadRegistrations();
+      });
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      checkAuth();
+    })();
+  </script>
+</body>
+</html>
