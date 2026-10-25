@@ -65,6 +65,14 @@ The EPIC CLUB portal connects future medical, pharmacy, and dental students with
 
 ---
 
+## ☁️ Cloud Deployment (Vercel + Neon PostgreSQL)
+
+The project includes ready-to-deploy **Vercel Serverless Functions** (`/api/*`) and a **Neon PostgreSQL** database layer (`lib/db.js`).
+
+For step-by-step instructions on deploying the portal to Vercel with zero server management:
+👉 **[Read the Vercel Deployment Guide (VERCEL_DEPLOYMENT.md)](./VERCEL_DEPLOYMENT.md)**
+
+
 ## 📁 Repository Structure
 
 ```
