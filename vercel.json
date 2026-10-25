@@ -1,31 +1,11 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    { "src": "/api/register", "dest": "/api/register.js" },
-    { "src": "/api/registration-info", "dest": "/api/registration-info.js" },
-    { "src": "/api/registration-status", "dest": "/api/registration-status.js" },
-    { "src": "/api/admin/login", "dest": "/api/admin/login.js" },
-    { "src": "/api/admin/logout", "dest": "/api/admin/logout.js" },
-    { "src": "/api/admin/me", "dest": "/api/admin/me.js" },
-    { "src": "/api/admin/settings", "dest": "/api/admin/settings.js" },
-    { "src": "/api/admin/summary", "dest": "/api/admin/summary.js" },
-    { "src": "/api/admin/registrations", "dest": "/api/admin/registrations.js" },
-    { "src": "/api/admin/registrations/(.*)", "dest": "/api/admin/registrations/[...slug].js?slug=$1" },
-    { "src": "/api/admin/audit-logs", "dest": "/api/admin/audit-logs.js" },
-    { "src": "/api/admin/init-db", "dest": "/api/admin/init-db.js" },
-    { "src": "/api/telegram/webhook", "dest": "/api/telegram/webhook.js" },
-    { "src": "/api/telegram/simulate-link", "dest": "/api/telegram/simulate-link.js" },
-    { "src": "/register", "dest": "/register.html" },
-    { "src": "/registration-success", "dest": "/registration-success.html" },
-    { "src": "/admin", "dest": "/admin.html" },
-    { "src": "/status", "dest": "/register.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/register", "destination": "/register.html" },
+    { "source": "/registration-success", "destination": "/registration-success.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/status", "destination": "/register.html" },
+    { "source": "/api/admin/registrations/:slug*", "destination": "/api/admin/registrations/[...slug]" }
   ],
   "headers": [
     {
