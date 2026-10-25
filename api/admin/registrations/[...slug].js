@@ -8,9 +8,9 @@
  *
  * Dynamic route: /api/admin/registrations/[...slug]
  */
-const db = require('../../../../lib/db');
-const { callTelegramApi } = require('../../../../lib/telegram');
-const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../../../lib/auth');
+const db = require('../../../lib/db');
+const { callTelegramApi } = require('../../../lib/telegram');
+const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../../lib/auth');
 
 function sanitizeStr(str, max = 255) {
   if (!str) return '';

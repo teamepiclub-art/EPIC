@@ -1,8 +1,8 @@
 /**
  * POST /api/telegram/simulate-link - Dev helper to simulate Telegram linking
  */
-const db = require('../../../lib/db');
-const { jsonResponse, setSecurityHeaders } = require('../../../lib/auth');
+const db = require('../../lib/db');
+const { jsonResponse, setSecurityHeaders } = require('../../lib/auth');
 
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);

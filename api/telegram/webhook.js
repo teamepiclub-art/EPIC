@@ -2,9 +2,9 @@
  * POST /api/telegram/webhook - Receive Telegram bot updates
  * POST /api/telegram/simulate-link - Development: Simulate linking
  */
-const db = require('../../../lib/db');
-const { callTelegramApi } = require('../../../lib/telegram');
-const { jsonResponse, setSecurityHeaders } = require('../../../lib/auth');
+const db = require('../../lib/db');
+const { callTelegramApi } = require('../../lib/telegram');
+const { jsonResponse, setSecurityHeaders } = require('../../lib/auth');
 
 async function handleTelegramUpdate(payload) {
   const chat = (payload.message && payload.message.chat) ||

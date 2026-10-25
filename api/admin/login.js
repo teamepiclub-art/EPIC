@@ -1,8 +1,8 @@
 /**
  * POST /api/admin/login
  */
-const db = require('../../../lib/db');
-const { jsonResponse, setSecurityHeaders, getClientIp, createSessionToken, SESSION_MAX_AGE_HOURS } = require('../../../lib/auth');
+const db = require('../../lib/db');
+const { jsonResponse, setSecurityHeaders, getClientIp, createSessionToken, SESSION_MAX_AGE_HOURS } = require('../../lib/auth');
 const crypto = require('crypto');
 
 module.exports = async function handler(req, res) {

@@ -2,8 +2,8 @@
  * GET /api/admin/registrations - List all registrations with filters
  * GET /api/admin/summary - Dashboard summary stats
  */
-const db = require('../../../lib/db');
-const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../../lib/auth');
+const db = require('../../lib/db');
+const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../lib/auth');
 
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);

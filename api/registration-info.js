@@ -2,8 +2,8 @@
  * GET /api/registration-info?id=EPIC-2026-XXXX
  * GET /api/registration-status?query=EPIC-2026-XXXX
  */
-const db = require('../../lib/db');
-const { jsonResponse, setSecurityHeaders } = require('../../lib/auth');
+const db = require('../lib/db');
+const { jsonResponse, setSecurityHeaders } = require('../lib/auth');
 
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);

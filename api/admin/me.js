@@ -1,7 +1,7 @@
 /**
  * GET /api/admin/me - Get current admin session info
  */
-const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../../lib/auth');
+const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../lib/auth');
 
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);

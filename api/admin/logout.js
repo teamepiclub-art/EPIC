@@ -1,8 +1,8 @@
 /**
  * POST /api/admin/logout
  */
-const db = require('../../../lib/db');
-const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../../lib/auth');
+const db = require('../../lib/db');
+const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../lib/auth');
 
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);

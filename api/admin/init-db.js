@@ -3,8 +3,8 @@
  * One-time database schema initialization for Neon PostgreSQL
  * Protected with a secret token
  */
-const db = require('../../../lib/db');
-const { jsonResponse, setSecurityHeaders } = require('../../../lib/auth');
+const db = require('../../lib/db');
+const { jsonResponse, setSecurityHeaders } = require('../../lib/auth');
 
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);

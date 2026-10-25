@@ -2,9 +2,9 @@
  * POST /api/register
  * Public endpoint - Submit new club membership registration
  */
-const db = require('../../lib/db');
-const { jsonResponse, setSecurityHeaders } = require('../../lib/auth');
-const { validateRegistrationInput, sanitizeString } = require('../../utils/validation');
+const db = require('../lib/db');
+const { jsonResponse, setSecurityHeaders } = require('../lib/auth');
+const { validateRegistrationInput, sanitizeString } = require('../utils/validation');
 
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);
