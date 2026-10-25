@@ -25,8 +25,19 @@ module.exports = async function handler(req, res) {
     return jsonResponse(res, 401, { success: false, error: 'Unauthorized: Admin authentication required.' });
   }
 
-  // slug = ['EPIC-2026-1234'] or ['EPIC-2026-1234', 'confirm'] etc
-  const slug = req.query.slug || [];
+  // Robust slug extraction: checks req.query.slug or extracts from req.url
+  let slug = [];
+  if (Array.isArray(req.query.slug)) {
+    slug = req.query.slug;
+  } else if (typeof req.query.slug === 'string' && req.query.slug.length > 0) {
+    slug = req.query.slug.split('/').filter(Boolean);
+  } else {
+    const pathname = (req.url || '').split('?')[0];
+    const prefix = '/api/admin/registrations/';
+    if (pathname.includes(prefix)) {
+      slug = pathname.slice(pathname.indexOf(prefix) + prefix.length).split('/').filter(Boolean);
+    }
+  }
   const regId = slug[0];
   const action = slug[1]; // confirm | reject | retry-invite | revoke-invite | telegram-status
 

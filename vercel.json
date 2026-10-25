@@ -16,7 +16,7 @@
     { "src": "/api/admin/settings", "dest": "/api/admin/settings.js" },
     { "src": "/api/admin/summary", "dest": "/api/admin/summary.js" },
     { "src": "/api/admin/registrations", "dest": "/api/admin/registrations.js" },
-    { "src": "/api/admin/registrations/(.*)", "dest": "/api/admin/registrations/[...slug].js" },
+    { "src": "/api/admin/registrations/(.*)", "dest": "/api/admin/registrations/[...slug].js?slug=$1" },
     { "src": "/api/admin/audit-logs", "dest": "/api/admin/audit-logs.js" },
     { "src": "/api/admin/init-db", "dest": "/api/admin/init-db.js" },
     { "src": "/api/telegram/webhook", "dest": "/api/telegram/webhook.js" },
