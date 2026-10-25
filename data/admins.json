@@ -1,0 +1,11 @@
+[
+  {
+    "id": "admin-1",
+    "username": "admin",
+    "fullName": "EPIC System Administrator",
+    "role": "SuperAdmin",
+    "salt": "6a3db5a74de620f9965317a78a7a32a1",
+    "hash": "3547d51f782c94d12861fd80f04474e33ed3d40af24445643beae10e051b2422e8c06532ad4f6b7edfdf1d9f00ee3933ec914bed759d228bceb3c05ef751a301",
+    "createdAt": "2026-10-22T11:32:07.385Z"
+  }
+]

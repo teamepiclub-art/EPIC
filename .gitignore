@@ -1,0 +1,26 @@
+# Environment and Sensitive Secrets
+.env
+.env.local
+.env.*.local
+
+# Database files & logs
+data/*.db
+data/*.db-wal
+data/*.db-shm
+data/sessions.json
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Temporary & Test files
+scratch/
+*.log
+npm-debug.log*
+
+# System & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.agents/

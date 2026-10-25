@@ -1,0 +1,11 @@
+{
+  "routes": [
+    { "path": "/", "title": "EPIC Club Registration" },
+    { "path": "/register", "title": "Register" },
+    { "path": "/status", "title": "Registration Status" },
+    { "path": "/admin", "title": "Admin Dashboard" },
+    { "path": "/admin/registrations", "title": "Registrations" },
+    { "path": "/admin/telegram", "title": "Telegram Management" },
+    { "path": "/admin/logs", "title": "Activity Logs" }
+  ]
+}

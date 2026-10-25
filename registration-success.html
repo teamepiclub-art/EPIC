@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Submitted Successfully! — EPIC CLUB</title>
+  <meta name="description" content="Your registration for EPIC CLUB has been received and is currently being reviewed.">
+  <link rel="icon" type="image/svg+xml" href="epic-mark.svg">
+
+  <!-- Google Fonts: Inter, Outfit, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       EPIC BRAND PALETTE & TOKENS
+       #00B8D9 (Cyan), #F4FBFD (Ice), #35BFA3 (Mint), #FCE445 (Yellow), #172B4D (Midnight), #102A43 (Navy)
+       ========================================================================== */
+    :root {
+      --cyan: #00B8D9;
+      --cyan-hover: #0098B3;
+      --cyan-light: #E6F9FC;
+      --cyan-subtle: rgba(0, 184, 217, 0.08);
+      
+      --ice: #F4FBFD;
+      --ice-surface: #FFFFFF;
+      
+      --mint: #35BFA3;
+      --mint-light: #EAF9F5;
+      
+      --yellow: #FCE445;
+      --yellow-subtle: rgba(252, 228, 69, 0.15);
+      
+      --midnight: #172B4D;
+      --navy: #102A43;
+      
+      --text-main: #102A43;
+      --text-muted: #5E6C84;
+      --text-subtle: #8993A4;
+      
+      --border-color: #E2ECF2;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      
+      --shadow-card: 0 20px 48px -12px rgba(16, 42, 67, 0.09), 0 2px 10px rgba(16, 42, 67, 0.04);
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-heading: 'Outfit', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background-color: var(--ice);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    body {
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(0, 184, 217, 0.07) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(53, 191, 163, 0.07) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(252, 228, 69, 0.02) 0%, transparent 60%);
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Minimal Top Navigation */
+    .success-nav {
+      width: 100%;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(226, 236, 242, 0.8);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .success-nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+    .brand-link:hover {
+      transform: scale(1.02);
+    }
+    .brand-logo-img {
+      height: 38px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-btn-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--midnight);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      background: var(--ice);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+    .nav-btn-home:hover {
+      background: #FFFFFF;
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 2px 8px rgba(0, 184, 217, 0.12);
+    }
+
+    /* Main Container */
+    .success-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px 60px;
+    }
+
+    .success-card {
+      width: 100%;
+      max-width: 600px;
+      background: var(--ice-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-card);
+      padding: 48px 42px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: cardAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Top decorative gradient bar */
+    .success-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--mint) 0%, var(--cyan) 50%, var(--yellow) 100%);
+    }
+
+    @keyframes cardAppear {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Animated Tasteful Confirmation Icon */
+    .icon-wrapper {
+      margin: 0 auto 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .success-icon-svg {
+      width: 84px;
+      height: 84px;
+    }
+
+    .circle-bg {
+      fill: var(--mint-light);
+      animation: scaleCircle 0.4s ease-out forwards;
+      transform-origin: center;
+    }
+
+    .circle-border {
+      fill: none;
+      stroke: var(--mint);
+      stroke-width: 2.5;
+      stroke-dasharray: 260;
+      stroke-dashoffset: 260;
+      animation: drawCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+
+    .check-path {
+      fill: none;
+      stroke: var(--mint);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 50;
+      stroke-dashoffset: 50;
+      animation: drawCheck 0.45s cubic-bezier(0.65, 0, 0.45, 1) 0.45s forwards;
+    }
+
+    @keyframes scaleCircle {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes drawCircle {
+      100% { stroke-dashoffset: 0; }
+    }
+
+    @keyframes drawCheck {
+      100% { stroke-dashoffset: 0; }
+    }
+
+    /* Headings */
+    .page-heading {
+      font-family: var(--font-heading);
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .page-message {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 30px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Reference & Status Box */
+    .ref-box {
+      background: var(--ice);
+      border: 1.5px dashed #CBE3EE;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .ref-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .ref-display-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ref-number {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+      background: #FFFFFF;
+      padding: 6px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 6px rgba(16, 42, 67, 0.04);
+      user-select: all;
+    }
+
+    .btn-copy-ref {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 42px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--midnight);
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-copy-ref:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 2px 8px rgba(0, 184, 217, 0.12);
+    }
+    .btn-copy-ref.copied {
+      background: var(--mint-light);
+      border-color: var(--mint);
+      color: var(--mint);
+    }
+
+    /* Pending Status Pill */
+    .status-badge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #FFF9E6;
+      border: 1px solid #FFE380;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #974F0C;
+    }
+
+    .status-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #FFAB00;
+      animation: pulseAnim 2s infinite;
+    }
+
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.85); }
+    }
+
+    /* Informational Next Steps */
+    .next-steps-panel {
+      text-align: left;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 22px 24px;
+      margin-bottom: 30px;
+    }
+
+    .next-steps-heading {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--navy);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .next-steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .next-step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .step-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--cyan-subtle);
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Actions Section */
+    .actions-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-return-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      height: 50px;
+      background: var(--navy);
+      color: #FFFFFF;
+      text-decoration: none;
+      font-family: var(--font-body);
+      font-size: 15.5px;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(16, 42, 67, 0.14);
+    }
+    .btn-return-home:hover {
+      background: #173859;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(16, 42, 67, 0.2);
+    }
+
+    .btn-telegram-channel {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 46px;
+      background: var(--ice);
+      color: var(--midnight);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+    .btn-telegram-channel:hover {
+      background: #FFFFFF;
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    /* State: No Reference Found */
+    .no-ref-alert {
+      display: none;
+      background: #FFF9E6;
+      border: 1px solid #FFE380;
+      color: #974F0C;
+      padding: 18px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .no-ref-alert.visible {
+      display: block;
+    }
+
+    /* Footer Meta */
+    .success-footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+      color: var(--text-subtle);
+    }
+
+    @media (max-width: 600px) {
+      .success-card {
+        padding: 34px 22px;
+      }
+      .page-heading {
+        font-size: 24px;
+      }
+      .page-message {
+        font-size: 15px;
+      }
+      .ref-number {
+        font-size: 20px;
+        padding: 6px 14px;
+      }
+      .success-nav {
+        padding: 14px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimal Top Navigation -->
+  <header class="success-nav">
+    <div class="success-nav-inner">
+      <a href="/" class="brand-link" aria-label="EPIC Club Home">
+        <img src="epic-logo-horizontal.png" alt="EPIC CLUB" class="brand-logo-img">
+      </a>
+      <a href="/" class="nav-btn-home" aria-label="Return to Homepage">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Homepage</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content Card -->
+  <main class="success-main">
+    <div class="success-card">
+      
+      <!-- Tasteful Confirmation Animation Icon -->
+      <div class="icon-wrapper" aria-hidden="true">
+        <svg class="success-icon-svg" viewBox="0 0 84 84">
+          <circle class="circle-bg" cx="42" cy="42" r="38"></circle>
+          <circle class="circle-border" cx="42" cy="42" r="38"></circle>
+          <path class="check-path" d="M26 43 L37 54 L58 31"></path>
+        </svg>
+      </div>
+
+      <!-- Exact Required Heading -->
+      <h1 class="page-heading">Registration Submitted Successfully!</h1>
+
+      <!-- Exact Required Message -->
+      <p class="page-message">
+        Your registration has been received and is currently being reviewed.
+      </p>
+
+      <!-- Graceful No-Reference Alert (if visited without submitting) -->
+      <div class="no-ref-alert" id="noRefAlert">
+        <strong>Notice:</strong> No active registration reference was found in this browser session. If you have not submitted your registration yet, please fill out the official registration form first.
+        <div style="margin-top: 12px;">
+          <a href="/register" class="btn-return-home" style="display:inline-flex; width:auto; height:38px; padding:0 18px; font-size:13.5px;">
+            Go to Registration Page
+          </a>
+        </div>
+      </div>
+
+      <!-- Unique Registration Reference Display -->
+      <div class="ref-box" id="refCard">
+        <span class="ref-label">Registration Reference</span>
+        
+        <div class="ref-display-row">
+          <span class="ref-number" id="referenceValue">EPIC-2026-PENDING</span>
+          
+          <button type="button" class="btn-copy-ref" id="copyBtn" title="Copy registration reference" aria-label="Copy registration reference">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="copyBtnText">Copy</span>
+          </button>
+        </div>
+
+        <!-- Strict Pending Status Indicator -->
+        <div class="status-badge-wrap">
+          <span class="status-pulse-dot"></span>
+          <span>Status: Pending Review</span>
+        </div>
+      </div>
+
+      <!-- Telegram Bot Account Linking Card -->
+      <div class="next-steps-panel" id="teleLinkingCard" style="background: #F4FBFD; border: 1.5px solid #C0D6E4; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <div style="font-size: 13.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--navy); display: flex; align-items: center; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            Connect Telegram Identity
+          </div>
+          <div id="linkingStatusIndicator" style="font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 9999px; background: #FFF9E6; color: #974F0C; border: 1px solid #FFE380;">
+            Waiting for Connection
+          </div>
+        </div>
+
+        <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45; margin-bottom: 14px;">
+          To reliably deliver your private invitation and onboarding updates, please connect your Telegram account by starting the official EPIC bot.
+        </p>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <a href="#" id="btnOpenBot" target="_blank" rel="noopener" class="btn-return-home" style="display: inline-flex; width: auto; height: 40px; padding: 0 18px; font-size: 13.5px; background: #0088cc;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <span>Open Telegram Bot & Connect</span>
+          </a>
+          <button type="button" class="btn-copy-ref" id="btnSimulateLinkSelf" style="height: 40px; font-size: 12px; display: none;">
+            ⚡ Test Connection
+          </button>
+        </div>
+      </div>
+
+      <!-- Next Steps & Verification Info -->
+      <div class="next-steps-panel">
+        <div class="next-steps-heading">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span>Next Steps</span>
+        </div>
+        
+        <ul class="next-steps-list">
+          <li class="next-step-item">
+            <span class="step-badge">1</span>
+            <div>
+              <strong>Keep Your Reference:</strong> Please save your unique reference number above. You will need it if you contact the club administration.
+            </div>
+          </li>
+          <li class="next-step-item">
+            <span class="step-badge">2</span>
+            <div>
+              <strong>Committee Review:</strong> Submissions are processed sequentially by the executive board of EPIC CLUB.
+            </div>
+          </li>
+          <li class="next-step-item">
+            <span class="step-badge">3</span>
+            <div>
+              <strong>Telegram Contact:</strong> Qualified candidates will be contacted via the Telegram username provided in the registration form.
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Action Buttons including Return to Homepage -->
+      <div class="actions-stack">
+        <!-- Exact Requirement: Button to return to homepage -->
+        <a href="/" class="btn-return-home" id="returnHomeBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>Return to Homepage</span>
+        </a>
+
+        <!-- Community Channel link -->
+        <a href="https://t.me/epicclub_medsetif" target="_blank" rel="noopener" class="btn-telegram-channel">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          <span>Follow EPIC Official Telegram Channel</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="success-footer">
+    EPIC CLUB · Faculty of Medicine of Sétif (UFAS 1)
+  </footer>
+
+  <!-- Script to retrieve actual registration reference and handle copy/refresh -->
+  <script>
+    (function() {
+      const refEl = document.getElementById('referenceValue');
+      const copyBtn = document.getElementById('copyBtn');
+      const copyBtnText = document.getElementById('copyBtnText');
+      const refCard = document.getElementById('refCard');
+      const noRefAlert = document.getElementById('noRefAlert');
+
+      // 1. Retrieve the actual registration reference returned by backend
+      // First check URL query parameter ?id=...
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlId = urlParams.get('id');
+
+      // Second check sessionStorage from the successful submission flow
+      let sessionData = null;
+      try {
+        const stored = sessionStorage.getItem('epic_registration');
+        if (stored) {
+          sessionData = JSON.parse(stored);
+        }
+      } catch (e) {
+        console.warn('Session storage read error:', e);
+      }
+
+      const actualReference = urlId || (sessionData && sessionData.id);
+
+      const btnOpenBot = document.getElementById('btnOpenBot');
+      const linkingStatusIndicator = document.getElementById('linkingStatusIndicator');
+      const teleLinkingCard = document.getElementById('teleLinkingCard');
+      const btnSimulateLinkSelf = document.getElementById('btnSimulateLinkSelf');
+
+      if (actualReference && typeof actualReference === 'string' && actualReference.trim().startsWith('EPIC-')) {
+        const cleanRef = actualReference.trim();
+        refEl.textContent = cleanRef;
+
+        // Check registration info & Telegram linking status
+        async function fetchLinkingStatus() {
+          try {
+            const res = await fetch('/api/registration-info?id=' + encodeURIComponent(cleanRef));
+            const data = await res.json();
+            if (data.success && data.data) {
+              const bot = data.data.botUsername || 'epic_club_setif_bot';
+              const token = data.data.linkingToken || ('link_' + cleanRef);
+              btnOpenBot.href = `https://t.me/${bot}?start=${token}`;
+
+              if (data.data.telegramLinked) {
+                linkingStatusIndicator.textContent = 'Account Connected ✓';
+                linkingStatusIndicator.style.background = '#E8F5E9';
+                linkingStatusIndicator.style.color = '#2E7D32';
+                linkingStatusIndicator.style.borderColor = '#C8E6C9';
+                btnOpenBot.style.background = '#2E7D32';
+                btnOpenBot.innerHTML = `
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Telegram Connected</span>
+                `;
+                btnSimulateLinkSelf.style.display = 'none';
+              } else {
+                btnSimulateLinkSelf.style.display = 'inline-flex';
+              }
+            }
+          } catch (e) {}
+        }
+
+        fetchLinkingStatus();
+        const pollInterval = setInterval(fetchLinkingStatus, 4000);
+
+        // Simulator button for testing
+        btnSimulateLinkSelf.addEventListener('click', async function() {
+          btnSimulateLinkSelf.disabled = true;
+          try {
+            await fetch('/api/telegram/simulate-link', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ registrationId: cleanRef })
+            });
+            fetchLinkingStatus();
+          } catch (e) {}
+        });
+
+      } else {
+        refCard.style.display = 'none';
+        teleLinkingCard.style.display = 'none';
+        noRefAlert.classList.add('visible');
+      }
+
+      // Copy to clipboard handler
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function() {
+          const textToCopy = refEl.textContent.trim();
+          if (!textToCopy || textToCopy.includes('PENDING')) return;
+
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            copyBtn.classList.add('copied');
+            copyBtnText.textContent = 'Copied!';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtnText.textContent = 'Copy';
+            }, 2500);
+          }).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = textToCopy;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            copyBtn.classList.add('copied');
+            copyBtnText.textContent = 'Copied!';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtnText.textContent = 'Copy';
+            }, 2500);
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
