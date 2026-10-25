@@ -10,7 +10,7 @@
  */
 const db = require('../../../lib/db');
 const { callTelegramApi } = require('../../../lib/telegram');
-const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../../lib/auth');
+const { jsonResponse, setSecurityHeaders, authenticateAdmin, parseBody } = require('../../../lib/auth');
 
 function sanitizeStr(str, max = 255) {
   if (!str) return '';
@@ -61,7 +61,7 @@ module.exports = async function handler(req, res) {
 
   // POST /api/admin/registrations/[id]/confirm
   if (action === 'confirm' && req.method === 'POST') {
-    const payload = req.body || {};
+    const payload = (await parseBody(req)) || {};
     const record = await db.getRegistrationByIdOrNumber(regId);
     if (!record) return jsonResponse(res, 404, { success: false, error: 'Registration record not found.' });
 
@@ -152,7 +152,7 @@ module.exports = async function handler(req, res) {
 
   // POST /api/admin/registrations/[id]/reject
   if (action === 'reject' && req.method === 'POST') {
-    const payload = req.body || {};
+    const payload = (await parseBody(req)) || {};
     const record = await db.getRegistrationByIdOrNumber(regId);
     if (!record) return jsonResponse(res, 404, { success: false, error: 'Registration record not found.' });
 

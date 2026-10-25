@@ -3,7 +3,7 @@
  * POST /api/admin/settings - Update system settings
  */
 const db = require('../../lib/db');
-const { jsonResponse, setSecurityHeaders, authenticateAdmin } = require('../../lib/auth');
+const { jsonResponse, setSecurityHeaders, authenticateAdmin, parseBody } = require('../../lib/auth');
 
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);
@@ -31,7 +31,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const payload = req.body || {};
+    const payload = await parseBody(req);
 
     if (payload.telegramBotToken !== undefined && payload.telegramBotToken.trim() !== '') {
       await db.setSetting('telegramBotToken', payload.telegramBotToken.trim());

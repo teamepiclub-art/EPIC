@@ -4,7 +4,7 @@
  * Protected with a secret token
  */
 const db = require('../../lib/db');
-const { jsonResponse, setSecurityHeaders } = require('../../lib/auth');
+const { jsonResponse, setSecurityHeaders, parseBody } = require('../../lib/auth');
 
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);
@@ -13,9 +13,10 @@ module.exports = async function handler(req, res) {
     return jsonResponse(res, 405, { success: false, error: 'Method not allowed' });
   }
 
+  const body = await parseBody(req);
   // Protect with INIT_SECRET env variable
   const initSecret = process.env.INIT_SECRET;
-  const providedSecret = req.headers['x-init-secret'] || (req.body && req.body.secret);
+  const providedSecret = req.headers['x-init-secret'] || (body && body.secret);
 
   if (initSecret && providedSecret !== initSecret) {
     return jsonResponse(res, 403, { success: false, error: 'Forbidden: Invalid init secret.' });

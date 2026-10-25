@@ -3,7 +3,7 @@
  * Public endpoint - Submit new club membership registration
  */
 const db = require('../lib/db');
-const { jsonResponse, setSecurityHeaders } = require('../lib/auth');
+const { jsonResponse, setSecurityHeaders, parseBody } = require('../lib/auth');
 const { validateRegistrationInput, sanitizeString } = require('../utils/validation');
 
 module.exports = async function handler(req, res) {
@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const payload = req.body || {};
+    const payload = await parseBody(req);
     const validation = validateRegistrationInput(payload);
     if (!validation.isValid) {
       return jsonResponse(res, 400, {

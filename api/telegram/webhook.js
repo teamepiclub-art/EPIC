@@ -4,7 +4,7 @@
  */
 const db = require('../../lib/db');
 const { callTelegramApi } = require('../../lib/telegram');
-const { jsonResponse, setSecurityHeaders } = require('../../lib/auth');
+const { jsonResponse, setSecurityHeaders, parseBody } = require('../../lib/auth');
 
 async function handleTelegramUpdate(payload) {
   const chat = (payload.message && payload.message.chat) ||
@@ -107,7 +107,7 @@ module.exports = async function handler(req, res) {
     }
 
     try {
-      const payload = req.body || {};
+      const payload = await parseBody(req);
       await handleTelegramUpdate(payload);
       return jsonResponse(res, 200, { ok: true });
     } catch (err) {

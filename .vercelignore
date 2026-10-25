@@ -1,0 +1,6 @@
+# Ignore local SQLite server and migrations from Vercel deployment
+local-server.js
+db/
+migrations/
+data/
+*.db

@@ -2,7 +2,7 @@
  * POST /api/admin/login
  */
 const db = require('../../lib/db');
-const { jsonResponse, setSecurityHeaders, getClientIp, createSessionToken, SESSION_MAX_AGE_HOURS } = require('../../lib/auth');
+const { jsonResponse, setSecurityHeaders, getClientIp, createSessionToken, parseBody, SESSION_MAX_AGE_HOURS } = require('../../lib/auth');
 const crypto = require('crypto');
 
 module.exports = async function handler(req, res) {
@@ -12,7 +12,8 @@ module.exports = async function handler(req, res) {
     return jsonResponse(res, 405, { success: false, error: 'Method not allowed' });
   }
 
-  const { username, password } = req.body || {};
+  const body = await parseBody(req);
+  const { username, password } = body || {};
   const clientIp = getClientIp(req);
 
   if (!username || !password) {

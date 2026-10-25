@@ -2,10 +2,9 @@
   "name": "epic-club-portal",
   "version": "2.0.0",
   "description": "Official Website and Student Portal for EPIC CLUB - Faculty of Medicine of Sétif, Algeria",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "node local-server.js",
+    "dev": "node local-server.js",
     "migrate": "node db/cli.js",
     "test": "node scratch/test_backend.js"
   },
