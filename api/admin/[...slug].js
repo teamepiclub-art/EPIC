@@ -65,9 +65,10 @@ module.exports = async function handler(req, res) {
     return urlObj.searchParams.get(param) || fallback;
   };
 
-  // -------------------------------------------------------------
-  // 1. POST /api/admin/login
-  // -------------------------------------------------------------
+  try {
+    // -------------------------------------------------------------
+    // 1. POST /api/admin/login
+    // -------------------------------------------------------------
   if (endpoint === 'login') {
     if (req.method !== 'POST') return jsonResponse(res, 405, { success: false, error: 'Method not allowed' });
 
@@ -488,4 +489,15 @@ module.exports = async function handler(req, res) {
   }
 
   return jsonResponse(res, 404, { success: false, error: `Admin route not found: /${slug.join('/')}` });
+  } catch (err) {
+    console.error('ADMIN_HANDLER_ERROR', err);
+    const isDbMissing = err.message && err.message.includes('DATABASE_URL');
+    return jsonResponse(res, 500, {
+      success: false,
+      error: isDbMissing
+        ? 'Database configuration missing: DATABASE_URL environment variable is not configured in Vercel project settings.'
+        : ('Server error: ' + err.message)
+    });
+  }
 };
+

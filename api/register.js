@@ -60,9 +60,13 @@ module.exports = async function handler(req, res) {
     });
   } catch (err) {
     console.error('REGISTRATION_CREATION_FAILED', err);
+    const isDbMissing = err.message && err.message.includes('DATABASE_URL');
     return jsonResponse(res, 500, {
       success: false,
-      error: 'An error occurred while saving your registration. Please try again.'
+      error: isDbMissing
+        ? 'Database configuration missing: DATABASE_URL environment variable is not configured in Vercel.'
+        : (err.message || 'An error occurred while saving your registration. Please try again.')
     });
   }
 };
+
