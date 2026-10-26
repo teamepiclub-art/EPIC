@@ -8,7 +8,9 @@
     { "source": "/registration-success", "destination": "/registration-success.html" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/status", "destination": "/register.html" },
-    { "source": "/api/admin/registrations/:slug*", "destination": "/api/admin/registrations/[...slug]" }
+    { "source": "/api/registration-status", "destination": "/api/registration-info" },
+    { "source": "/api/admin/:slug*", "destination": "/api/admin/[...slug]" },
+    { "source": "/api/telegram/:slug*", "destination": "/api/telegram/[...slug]" }
   ],
   "headers": [
     {

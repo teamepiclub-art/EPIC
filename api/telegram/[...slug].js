@@ -1,6 +1,8 @@
 /**
- * POST /api/telegram/webhook - Receive Telegram bot updates
- * POST /api/telegram/simulate-link - Development: Simulate linking
+ * Unified Telegram Serverless Function
+ * Handles both:
+ * - POST /api/telegram/webhook
+ * - POST /api/telegram/simulate-link
  */
 const db = require('../../lib/db');
 const { callTelegramApi } = require('../../lib/telegram');
@@ -63,8 +65,22 @@ async function handleTelegramUpdate(payload) {
 
         if (sendRes.ok) {
           await db.updateTelegramInviteStatus(record.id, 'Delivered');
-          await db.saveInvitation({ registrationId: record.id, targetGroupIdentifier: record.invitation.targetChatId, inviteLink: record.invitation.inviteLink, expiryTimestamp: record.invitation.expireDate, status: 'Delivered', sentAt: new Date().toISOString() });
-          await db.createAuditLog({ actorId: 'telegram_bot', actorUsername: 'Telegram Bot', action: 'INVITATION_DELIVERED', affectedRegistrationId: record.registrationNumber, outcome: 'SUCCESS', details: `Direct single-use invite delivered to chat ID ${chatId}` });
+          await db.saveInvitation({
+            registrationId: record.id,
+            targetGroupIdentifier: record.invitation.targetChatId,
+            inviteLink: record.invitation.inviteLink,
+            expiryTimestamp: record.invitation.expireDate,
+            status: 'Delivered',
+            sentAt: new Date().toISOString()
+          });
+          await db.createAuditLog({
+            actorId: 'telegram_bot',
+            actorUsername: 'Telegram Bot',
+            action: 'INVITATION_DELIVERED',
+            affectedRegistrationId: record.registrationNumber,
+            outcome: 'SUCCESS',
+            details: `Direct single-use invite delivered to chat ID ${chatId}`
+          });
         }
         return;
       }
@@ -93,11 +109,23 @@ async function handleTelegramUpdate(payload) {
 module.exports = async function handler(req, res) {
   setSecurityHeaders(res);
 
-  const path = req.url.split('?')[0];
+  let slug = [];
+  if (Array.isArray(req.query.slug)) {
+    slug = req.query.slug;
+  } else if (typeof req.query.slug === 'string' && req.query.slug.length > 0) {
+    slug = req.query.slug.split('/').filter(Boolean);
+  } else {
+    const pathname = (req.url || '').split('?')[0];
+    const prefix = '/api/telegram/';
+    if (pathname.includes(prefix)) {
+      slug = pathname.slice(pathname.indexOf(prefix) + prefix.length).split('/').filter(Boolean);
+    }
+  }
+
+  const endpoint = slug[0] || '';
 
   // POST /api/telegram/webhook
-  if (req.method === 'POST' && (path.endsWith('/webhook') || req.query.action === 'webhook')) {
-    // Verify secret token
+  if (endpoint === 'webhook' && req.method === 'POST') {
     const webhookSecret = process.env.TELEGRAM_WEBHOOK_SECRET;
     if (webhookSecret) {
       const secretHeader = req.headers['x-telegram-bot-api-secret-token'];
@@ -116,9 +144,10 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  // POST /api/telegram/simulate-link (dev helper)
-  if (req.method === 'POST' && (path.endsWith('/simulate-link') || req.query.action === 'simulate-link')) {
-    const { registrationId, chatId } = req.body || {};
+  // POST /api/telegram/simulate-link
+  if (endpoint === 'simulate-link' && req.method === 'POST') {
+    const body = (await parseBody(req)) || {};
+    const { registrationId, chatId } = body;
     if (!registrationId) return jsonResponse(res, 400, { success: false, error: 'Registration ID is required' });
 
     const record = await db.getRegistrationByIdOrNumber(registrationId);
@@ -134,5 +163,5 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  return jsonResponse(res, 404, { success: false, error: 'Not found' });
+  return jsonResponse(res, 404, { success: false, error: 'Telegram endpoint not found' });
 };
