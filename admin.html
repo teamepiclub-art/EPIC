@@ -1929,6 +1929,7 @@
       }
 
       async function loadRegistrations() {
+        window.loadRegistrations = loadRegistrations;
         const search = tableSearchInput.value.trim();
         const status = statusFilter.value;
         const telegramStatus = telegramFilter.value;
