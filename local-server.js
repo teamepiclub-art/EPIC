@@ -446,10 +446,18 @@ const server = http.createServer(async (req, res) => {
     pathname = pathname.slice(0, -1);
   }
 
-  // Security Headers
+  // Security & CORS Headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    return res.end();
+  }
 
   // Route Aliases
   if (pathname === '/' || pathname === '') {
@@ -970,6 +978,8 @@ const server = http.createServer(async (req, res) => {
     const search = (query.search || '').trim();
     const statusFilter = (query.status || 'All').trim();
     const telegramFilter = (query.telegramStatus || 'All').trim();
+    const fieldFilter = (query.fieldOfStudy || 'All').trim();
+    const deptFilter = (query.department || 'All').trim();
     const page = parseInt(query.page || '1', 10) || 1;
     const limit = parseInt(query.limit || '10', 10) || 10;
 
@@ -977,6 +987,8 @@ const server = http.createServer(async (req, res) => {
       search,
       status: statusFilter,
       telegramStatus: telegramFilter,
+      fieldOfStudy: fieldFilter,
+      department: deptFilter,
       page,
       limit
     });
@@ -1444,6 +1456,64 @@ const server = http.createServer(async (req, res) => {
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ success: true, logs }));
+  }
+
+  // 19. GET /api/admin/backup
+  if (pathname === '/api/admin/backup' && req.method === 'GET') {
+    const auth = authenticateAdmin(req);
+    if (!auth.authenticated) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, error: 'Unauthorized: Admin authentication required.' }));
+    }
+
+    const backup = db.exportFullBackup();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ success: true, backup }));
+  }
+
+  // 20. POST /api/admin/restore
+  if (pathname === '/api/admin/restore' && req.method === 'POST') {
+    const auth = authenticateAdmin(req);
+    if (!auth.authenticated) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, error: 'Unauthorized: Admin authentication required.' }));
+    }
+
+    let rawBody = '';
+    req.on('data', chunk => { rawBody += chunk; });
+    req.on('end', () => {
+      try {
+        const body = JSON.parse(rawBody || '{}');
+        const { data, mode = 'merge' } = body;
+
+        if (!data) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({ success: false, error: 'بيانات النسخة الاحتياطية مطلوبة.' }));
+        }
+
+        const stats = db.restoreBackup(data, mode);
+
+        db.createAuditLog({
+          actorId: auth.session.adminId,
+          actorUsername: auth.session.username,
+          action: 'DATABASE_RESTORE',
+          outcome: 'SUCCESS',
+          details: `Restored ${stats.registrationsRestored} registrations (mode: ${mode})`,
+          ipAddress: req.socket.remoteAddress
+        });
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+          success: true,
+          message: `تمت استعادة البيانات بنجاح (${stats.registrationsRestored} طالب مسجل).`,
+          stats
+        }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, error: 'خطأ أثناء استعادة البيانات: ' + err.message }));
+      }
+    });
+    return;
   }
 
   // =========================================================================

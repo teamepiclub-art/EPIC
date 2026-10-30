@@ -600,7 +600,7 @@ const dbService = {
     return this.getRegistrationByIdOrNumber(reg.internalId);
   },
 
-  listRegistrations({ search = '', status = 'All', telegramStatus = 'All', page = 1, limit = 10 }) {
+  listRegistrations({ search = '', status = 'All', telegramStatus = 'All', fieldOfStudy = 'All', department = 'All', page = 1, limit = 10 }) {
     const conditions = [];
     const params = [];
 
@@ -612,6 +612,16 @@ const dbService = {
     if (telegramStatus && telegramStatus !== 'All') {
       conditions.push('r.telegram_invite_status = ?');
       params.push(telegramStatus);
+    }
+
+    if (fieldOfStudy && fieldOfStudy !== 'All') {
+      conditions.push('r.field_of_study = ?');
+      params.push(fieldOfStudy);
+    }
+
+    if (department && department !== 'All') {
+      conditions.push('(r.primary_department = ? OR r.secondary_department = ?)');
+      params.push(department, department);
     }
 
     if (search && search.trim()) {
@@ -635,7 +645,7 @@ const dbService = {
     const totalCount = countStmt.get(...params).total;
 
     // Pagination bounds
-    const safeLimit = Math.max(1, Math.min(limit, 100));
+    const safeLimit = Math.max(1, Math.min(limit, 10000));
     const totalPages = Math.max(1, Math.ceil(totalCount / safeLimit));
     const safePage = Math.min(Math.max(1, page), totalPages);
     const offset = (safePage - 1) * safeLimit;
@@ -848,6 +858,190 @@ const dbService = {
       LIMIT ? OFFSET ?
     `);
     return stmt.all(...params, limit, offset);
+  },
+
+  // ---------------------------------------------------------------------------
+  // BACKUP & RESTORE
+  // ---------------------------------------------------------------------------
+  exportFullBackup() {
+    const result = {
+      exportedAt: new Date().toISOString(),
+      system: 'EPIC CLUB Registration Portal',
+      version: '2.0.0'
+    };
+    const tables = ['admins', 'system_settings', 'registrations', 'invitations', 'audit_logs'];
+    for (const tbl of tables) {
+      try {
+        result[tbl] = db.prepare(`SELECT * FROM ${tbl}`).all();
+      } catch (_) {
+        result[tbl] = [];
+      }
+    }
+    return result;
+  },
+
+  restoreBackup(backupData, mode = 'merge') {
+    let registrationsList = [];
+    let settingsList = [];
+    let invitationsList = [];
+
+    if (Array.isArray(backupData)) {
+      registrationsList = backupData;
+    } else if (typeof backupData === 'object' && backupData !== null) {
+      if (Array.isArray(backupData.registrations)) {
+        registrationsList = backupData.registrations;
+      }
+      if (Array.isArray(backupData.system_settings)) {
+        settingsList = backupData.system_settings;
+      } else if (backupData.settings && typeof backupData.settings === 'object') {
+        settingsList = Object.entries(backupData.settings).map(([k, v]) => ({ key: k, value: String(v) }));
+      }
+      if (Array.isArray(backupData.invitations)) {
+        invitationsList = backupData.invitations;
+      }
+    }
+
+    const stats = {
+      registrationsRestored: 0,
+      settingsRestored: 0,
+      invitationsRestored: 0
+    };
+
+    db.exec('BEGIN TRANSACTION;');
+    try {
+      if (mode === 'replace') {
+        db.exec('DELETE FROM audit_logs;');
+        db.exec('DELETE FROM invitations;');
+        db.exec('DELETE FROM registrations;');
+      }
+
+      const insertRegStmt = db.prepare(`
+        INSERT INTO registrations (
+          id, registration_number, first_name, last_name, telegram_username,
+          telegram_chat_id, phone_number, normalized_phone, status, linking_token,
+          linking_token_expires_at, linking_token_consumed_at, telegram_linked_at,
+          telegram_invite_status, rejection_reason, field_of_study, academic_year,
+          matricule, primary_department, secondary_department, motivation,
+          created_at, updated_at, confirmed_at, confirmed_by
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT (id) DO UPDATE SET
+          registration_number = excluded.registration_number,
+          first_name = excluded.first_name,
+          last_name = excluded.last_name,
+          telegram_username = excluded.telegram_username,
+          telegram_chat_id = excluded.telegram_chat_id,
+          phone_number = excluded.phone_number,
+          normalized_phone = excluded.normalized_phone,
+          status = excluded.status,
+          linking_token = excluded.linking_token,
+          linking_token_expires_at = excluded.linking_token_expires_at,
+          linking_token_consumed_at = excluded.linking_token_consumed_at,
+          telegram_linked_at = excluded.telegram_linked_at,
+          telegram_invite_status = excluded.telegram_invite_status,
+          rejection_reason = excluded.rejection_reason,
+          field_of_study = excluded.field_of_study,
+          academic_year = excluded.academic_year,
+          matricule = excluded.matricule,
+          primary_department = excluded.primary_department,
+          secondary_department = excluded.secondary_department,
+          motivation = excluded.motivation,
+          updated_at = excluded.updated_at,
+          confirmed_at = excluded.confirmed_at,
+          confirmed_by = excluded.confirmed_by
+      `);
+
+      const validAdminIds = new Set(db.prepare('SELECT id FROM admins').all().map(a => a.id));
+
+      for (const reg of registrationsList) {
+        const id = reg.id || crypto.randomUUID();
+        const regNum = reg.registration_number || reg.registrationNumber || `EPIC-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+        const firstName = reg.first_name || reg.firstName || '';
+        const lastName = reg.last_name || reg.lastName || '';
+        const tgUser = (reg.telegram_username || reg.telegramUsername || '').replace(/^@/, '');
+        const tgChatId = reg.telegram_chat_id || reg.telegramChatId || null;
+        const phone = reg.phone_number || reg.phoneNumber || '';
+        const normPhone = reg.normalized_phone || reg.normalizedPhone || phone.replace(/[^0-9]/g, '');
+        const status = ['Pending', 'Confirmed', 'Rejected'].includes(reg.status) ? reg.status : 'Pending';
+        const linkToken = reg.linking_token || reg.linkingToken || `link_${crypto.randomBytes(16).toString('base64url')}`;
+        const linkExpAt = reg.linking_token_expires_at || reg.linkingTokenExpiresAt || null;
+        const linkConsAt = reg.linking_token_consumed_at || reg.linkingTokenConsumedAt || null;
+        const tgLinkedAt = reg.telegram_linked_at || reg.telegramLinkedAt || null;
+        const inviteStatus = reg.telegram_invite_status || reg.telegramInviteStatus || 'Not Sent';
+        const rejReason = reg.rejection_reason || reg.rejectionReason || null;
+        const fieldStudy = reg.field_of_study || reg.fieldOfStudy || null;
+        const acadYear = reg.academic_year || reg.academicYear || null;
+        const matricule = reg.matricule || null;
+        const priDept = reg.primary_department || reg.primaryDepartment || null;
+        const secDept = reg.secondary_department || reg.secondaryDepartment || null;
+        const motivation = reg.motivation || null;
+        const createdAt = reg.created_at || reg.createdAt || new Date().toISOString();
+        const updatedAt = reg.updated_at || reg.updatedAt || new Date().toISOString();
+        const confirmedAt = reg.confirmed_at || reg.confirmedAt || null;
+        let confirmedBy = reg.confirmed_by || reg.confirmedBy || null;
+        if (confirmedBy && !validAdminIds.has(confirmedBy)) {
+          confirmedBy = null;
+        }
+
+        insertRegStmt.run(
+          id, regNum, firstName, lastName, tgUser,
+          tgChatId, phone, normPhone, status, linkToken,
+          linkExpAt, linkConsAt, tgLinkedAt,
+          inviteStatus, rejReason, fieldStudy, acadYear,
+          matricule, priDept, secDept, motivation,
+          createdAt, updatedAt, confirmedAt, confirmedBy
+        );
+        stats.registrationsRestored++;
+      }
+
+      // Settings
+      const insertSettingStmt = db.prepare(`
+        INSERT INTO system_settings (key, value, updated_at)
+        VALUES (?, ?, ?)
+        ON CONFLICT (key) DO UPDATE SET
+          value = excluded.value,
+          updated_at = excluded.updated_at
+      `);
+      for (const s of settingsList) {
+        if (s.key && s.value !== undefined) {
+          insertSettingStmt.run(s.key, String(s.value), new Date().toISOString());
+          stats.settingsRestored++;
+        }
+      }
+
+      // Invitations
+      const insertInvStmt = db.prepare(`
+        INSERT INTO invitations (
+          id, registration_id, target_group_identifier, invite_link,
+          status, created_at, sent_at, expiry_timestamp, last_error
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT (id) DO UPDATE SET
+          target_group_identifier = excluded.target_group_identifier,
+          invite_link = excluded.invite_link,
+          status = excluded.status,
+          sent_at = excluded.sent_at,
+          expiry_timestamp = excluded.expiry_timestamp,
+          last_error = excluded.last_error
+      `);
+      for (const inv of invitationsList) {
+        if (inv.registration_id) {
+          const invId = inv.id || crypto.randomUUID();
+          insertInvStmt.run(
+            invId, inv.registration_id, inv.target_group_identifier || '',
+            inv.invite_link || null, inv.status || 'Delivered',
+            inv.created_at || new Date().toISOString(), inv.sent_at || null,
+            inv.expiry_timestamp || null, inv.last_error || null
+          );
+          stats.invitationsRestored++;
+        }
+      }
+
+      db.exec('COMMIT;');
+    } catch (err) {
+      db.exec('ROLLBACK;');
+      throw err;
+    }
+
+    return stats;
   }
 };
 

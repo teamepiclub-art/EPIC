@@ -7,6 +7,8 @@
     "start": "node local-server.js",
     "dev": "node local-server.js",
     "migrate": "node db/cli.js",
+    "backup": "node scripts/backup-databases.js",
+    "restore": "node scripts/restore-database.js",
     "test": "node scratch/test_backend.js"
   },
   "dependencies": {

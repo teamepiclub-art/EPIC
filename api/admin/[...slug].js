@@ -271,6 +271,51 @@ module.exports = async function handler(req, res) {
   }
 
   // -------------------------------------------------------------
+  // 7b. GET /api/admin/backup
+  // -------------------------------------------------------------
+  if (endpoint === 'backup') {
+    const auth = await authenticateAdmin(req);
+    if (!auth.authenticated) return jsonResponse(res, 401, { success: false, error: auth.error });
+    if (req.method !== 'GET') return jsonResponse(res, 405, { success: false, error: 'Method not allowed' });
+
+    const backup = await db.exportFullBackup();
+    return jsonResponse(res, 200, { success: true, backup });
+  }
+
+  // -------------------------------------------------------------
+  // 7c. POST /api/admin/restore
+  // -------------------------------------------------------------
+  if (endpoint === 'restore') {
+    const auth = await authenticateAdmin(req);
+    if (!auth.authenticated) return jsonResponse(res, 401, { success: false, error: auth.error });
+    if (req.method !== 'POST') return jsonResponse(res, 405, { success: false, error: 'Method not allowed' });
+
+    const body = (await parseBody(req)) || {};
+    const { data, mode = 'merge' } = body;
+
+    if (!data) {
+      return jsonResponse(res, 400, { success: false, error: 'بيانات النسخة الاحتياطية مطلوبة.' });
+    }
+
+    const stats = await db.restoreBackup(data, mode);
+
+    await db.createAuditLog({
+      actorId: auth.session.adminId,
+      actorUsername: auth.session.username,
+      action: 'DATABASE_RESTORE',
+      outcome: 'SUCCESS',
+      details: `Restored ${stats.registrationsRestored} registrations (mode: ${mode})`,
+      ipAddress: getClientIp(req)
+    });
+
+    return jsonResponse(res, 200, {
+      success: true,
+      message: `تمت استعادة البيانات بنجاح (${stats.registrationsRestored} طالب مسجل).`,
+      stats
+    });
+  }
+
+  // -------------------------------------------------------------
   // 8. /api/admin/registrations...
   // -------------------------------------------------------------
   if (endpoint === 'registrations') {
@@ -282,6 +327,8 @@ module.exports = async function handler(req, res) {
       const search = getQuery('search', '');
       const status = getQuery('status', 'All');
       const telegramStatus = getQuery('telegramStatus', 'All');
+      const fieldOfStudy = getQuery('fieldOfStudy', 'All');
+      const department = getQuery('department', 'All');
       const page = parseInt(getQuery('page', '1'), 10) || 1;
       const limit = parseInt(getQuery('limit', '10'), 10) || 10;
 
@@ -290,6 +337,8 @@ module.exports = async function handler(req, res) {
           search: search.trim(),
           status: status.trim(),
           telegramStatus: telegramStatus.trim(),
+          fieldOfStudy: fieldOfStudy.trim(),
+          department: department.trim(),
           page,
           limit
         });
