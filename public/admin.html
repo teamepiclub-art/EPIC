@@ -1117,6 +1117,15 @@
       </div>
 
       <div class="admin-nav-right">
+        <button type="button" class="btn-nav-action" id="btnOpenBackupModal" title="النسخ الاحتياطي واستعادة البيانات" style="color: #059669; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); font-weight: 600;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+          </svg>
+          <span>النسخ والاستعادة (Backup)</span>
+        </button>
+
         <button type="button" class="btn-nav-action" id="btnOpenSettings" title="Configure Telegram Bot">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"></path></svg>
           <span>Telegram Config</span>
@@ -1228,7 +1237,27 @@
             >
           </div>
 
-          <div class="filter-group">
+          <div class="filter-group" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+            <label for="fieldFilter" class="filter-label">Field:</label>
+            <select id="fieldFilter" class="filter-select">
+              <option value="All">All Fields</option>
+              <option value="Medicine">Medicine (الطب)</option>
+              <option value="Pharmacy">Pharmacy (الصيدلة)</option>
+              <option value="Dental Medicine">Dental Medicine (طب الأسنان)</option>
+            </select>
+
+            <label for="deptFilter" class="filter-label">Department:</label>
+            <select id="deptFilter" class="filter-select" style="max-width: 220px;">
+              <option value="All">All Departments</option>
+              <option value="Media, Design & Creative Production">Media & Creative Design</option>
+              <option value="Public Health & Awareness">Public Health & Awareness</option>
+              <option value="Medical & Clinical Training">Medical & Clinical Training</option>
+              <option value="Scientific Research & Congresses">Scientific Research</option>
+              <option value="Logistics & Event Planning">Logistics & Events</option>
+              <option value="Human Resources & Internal Coordination">HR & Coordination</option>
+              <option value="External Relations & Partnerships">External Relations</option>
+            </select>
+
             <label for="statusFilter" class="filter-label">Status:</label>
             <select id="statusFilter" class="filter-select">
               <option value="All">All Statuses</option>
@@ -1245,6 +1274,15 @@
               <option value="Failed">Failed (Retry Available)</option>
               <option value="Not Sent">Not Sent</option>
             </select>
+
+            <button type="button" id="btnExportFilteredCsv" class="btn-act" style="background: #10B981; color: white; height: 34px; padding: 0 14px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; border: none; cursor: pointer; margin-left: 6px;" title="Export filtered rows to Excel CSV">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Export Excel</span>
+            </button>
           </div>
         </div>
 
@@ -1256,6 +1294,8 @@
                 <th>Registration ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Field of Study</th>
+                <th>Department</th>
                 <th>Telegram Username</th>
                 <th>Phone Number</th>
                 <th>Registration Date</th>
@@ -1630,6 +1670,135 @@
     </div>
   </div>
 
+  <!-- =========================================================================
+       7. BACKUP & RESTORE MODAL (SINGLE SOURCE OF TRUTH)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="backupRestoreModal">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header" style="direction: rtl;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(16, 185, 129, 0.12); display: flex; align-items: center; justify-content: center; color: #10b981;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="modal-title" style="margin: 0; font-size: 18px;">النسخ الاحتياطي واستعادة البيانات</h3>
+            <span style="font-size: 12px; color: var(--text-subtle);">إدارة سلامة البيانات واسترجاع قائمة الطلاب</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeBackupModal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 20px; direction: rtl; max-height: calc(85vh - 120px); overflow-y: auto;">
+        <!-- Tabs -->
+        <div style="display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          <button type="button" id="tabBtnRestore" style="background: var(--navy); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer;">
+            📥 استعادة البيانات من ملف نسخة
+          </button>
+          <button type="button" id="tabBtnExport" style="background: transparent; color: var(--navy); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer;">
+            📤 تحميل وتصدير نسخة احتياطية
+          </button>
+        </div>
+
+        <!-- RESTORE SECTION -->
+        <div id="sectionRestore">
+          <!-- Drop Zone -->
+          <div id="backupDropZone" style="border: 2px dashed #CBD5E1; border-radius: 12px; padding: 28px 20px; text-align: center; background: #F8FAFC; cursor: pointer; transition: all 0.2s ease;">
+            <input type="file" id="backupFileInput" accept=".json,.csv" style="display: none;">
+            <div style="width: 48px; height: 48px; margin: 0 auto 12px; border-radius: 50%; background: #EEF2F6; display: flex; align-items: center; justify-content: center; color: var(--navy);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <p style="font-weight: 700; color: var(--navy); margin-bottom: 6px; font-size: 14px;">اسحب وأفلت ملف النسخة الاحتياطية هنا، أو انقر للاختيار</p>
+            <p style="font-size: 12px; color: var(--text-subtle); margin: 0;">يدعم ملفات <b>JSON</b> (مثل <code>postgres_data.json</code>) أو ملفات <b>Excel CSV</b> (مثل <code>registrations.csv</code>)</p>
+          </div>
+
+          <!-- File Detected & Preview Box -->
+          <div id="backupPreviewBox" style="display: none; margin-top: 16px; border: 1px solid #E2E8F0; border-radius: 8px; padding: 14px; background: #FFFFFF;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 20px;">📄</span>
+                <div>
+                  <div id="previewFileName" style="font-weight: 700; font-size: 13.5px; color: var(--navy);">file.json</div>
+                  <div id="previewFileSize" style="font-size: 11px; color: var(--text-subtle);">0 KB</div>
+                </div>
+              </div>
+              <span id="previewCountBadge" style="background: #ECFDF5; color: #065F46; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700;">
+                0 طالب جاهز للاسترجاع
+              </span>
+            </div>
+
+            <!-- Mini Preview Table -->
+            <div id="previewTableContainer" style="max-height: 140px; overflow-y: auto; font-size: 11.5px; border: 1px solid #F1F5F9; border-radius: 6px;">
+              <!-- mini preview injected here -->
+            </div>
+
+            <!-- Restore Mode Selector -->
+            <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #F1F5F9;">
+              <span style="display: block; font-size: 12.5px; font-weight: 700; color: var(--navy); margin-bottom: 8px;">طريقة الاستعادة:</span>
+              <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; margin-bottom: 8px; cursor: pointer;">
+                <input type="radio" name="restoreMode" value="merge" checked style="margin-top: 3px;">
+                <div>
+                  <b>دمج وتحديث السجلات (Merge / Update) [موصى به]</b>
+                  <div style="color: var(--text-subtle); font-size: 11.5px;">تحديث بيانات الطلاب المطابقة وإضافة الجدد دون حذف البيانات الحالية.</div>
+                </div>
+              </label>
+              <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; cursor: pointer;">
+                <input type="radio" name="restoreMode" value="replace" style="margin-top: 3px;">
+                <div>
+                  <b style="color: #DC2626;">استبدال كامل لقاعدة البيانات (Full Replace)</b>
+                  <div style="color: var(--text-subtle); font-size: 11.5px;">حذف سجلات الطلاب الحالية واستبدالها بالكامل بالسجلات الموجودة في هذا الملف.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div id="restoreStatusMsg" style="display: none; margin-top: 12px; padding: 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600;"></div>
+        </div>
+
+        <!-- EXPORT SECTION -->
+        <div id="sectionExport" style="display: none;">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: #FAFAFA;">
+              <div>
+                <div style="font-weight: 700; font-size: 13.5px; color: var(--navy);">تصدير قاعدة البيانات كاملة (JSON)</div>
+                <div style="font-size: 11.5px; color: var(--text-subtle);">ملف متكامل يحتوي على الطلاب، الإعدادات، وسجل العمليات</div>
+              </div>
+              <button type="button" id="btnDownloadJsonBackup" class="btn-act" style="background: var(--navy); color: white; height: 34px; padding: 0 14px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                تحميل JSON
+              </button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: #FAFAFA;">
+              <div>
+                <div style="font-weight: 700; font-size: 13.5px; color: var(--navy);">تصدير قائمة الطلاب إلى Excel (CSV)</div>
+                <div style="font-size: 11.5px; color: var(--text-subtle);">ملف متوافق 100% مع Microsoft Excel واللغة العربية</div>
+              </div>
+              <button type="button" id="btnDownloadCsvBackup" class="btn-act" style="background: #10B981; color: white; height: 34px; padding: 0 14px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                تحميل Excel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="direction: rtl; justify-content: flex-start; gap: 10px;">
+        <button type="button" class="btn-act btn-act-confirm" id="btnExecuteRestore" style="background: #10B981; height: 38px; padding: 0 20px; font-size: 13px; display: none; font-weight: 700;">
+          ⚡ استعادة البيانات الآن
+        </button>
+        <button type="button" class="btn-act" id="btnCancelBackupModal" style="height: 38px;">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div class="toast-msg" id="toastMsg">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -1915,14 +2084,10 @@
           tr.className = 'table-loading-row';
           tr.innerHTML = `
             <td><div class="skeleton-cell" style="width:110px"></div></td>
-            <td><div class="skeleton-cell" style="width:80px"></div></td>
             <td><div class="skeleton-cell" style="width:90px"></div></td>
-            <td><div class="skeleton-cell" style="width:100px"></div></td>
-            <td><div class="skeleton-cell" style="width:100px"></div></td>
-            <td><div class="skeleton-cell" style="width:90px"></div></td>
-            <td><div class="skeleton-cell" style="width:70px"></div></td>
-            <td><div class="skeleton-cell" style="width:80px"></div></td>
-            <td><div class="skeleton-cell" style="width:120px; margin-left:auto"></div></td>
+              <td><div class="skeleton-cell" style="width:110px"></div></td>
+              <td><div class="skeleton-cell" style="width:80px"></div></td>
+              <td><div class="skeleton-cell" style="width:120px; margin-left:auto"></div></td>
           `;
           registrationsTableBody.appendChild(tr);
         }
@@ -1933,11 +2098,15 @@
         const search = tableSearchInput.value.trim();
         const status = statusFilter.value;
         const telegramStatus = telegramFilter.value;
+        const fieldOfStudy = document.getElementById('fieldFilter') ? document.getElementById('fieldFilter').value : 'All';
+        const department = document.getElementById('deptFilter') ? document.getElementById('deptFilter').value : 'All';
 
         const params = new URLSearchParams({
           search: search,
           status: status,
           telegramStatus: telegramStatus,
+          fieldOfStudy: fieldOfStudy,
+          department: department,
           page: currentPage.toString(),
           limit: pageSize.toString()
         });
@@ -1961,6 +2130,16 @@
             throw new Error(result.error || 'Failed to load registrations');
           }
 
+          let items = result.data || [];
+
+          // Robust fallback client filter guarantee
+          if (fieldOfStudy !== 'All') {
+            items = items.filter(r => (r.fieldOfStudy || '').toLowerCase() === fieldOfStudy.toLowerCase());
+          }
+          if (department !== 'All') {
+            items = items.filter(r => (r.primaryDepartment || '').includes(department) || (r.secondaryDepartment || '').includes(department));
+          }
+
           if (result.summary) {
             statTotalCount.textContent = result.summary.total || 0;
             statPendingCount.textContent = result.summary.pending || 0;
@@ -1968,10 +2147,11 @@
             statRejectedCount.textContent = result.summary.rejected || 0;
           }
 
-          renderTable(result.data, result.totalCount, result.page, result.totalPages);
+          const totalDisplayCount = (fieldOfStudy !== 'All' || department !== 'All') ? items.length : result.totalCount;
+          renderTable(items, totalDisplayCount, result.page, result.totalPages);
         } catch (err) {
           console.error('Error loading registrations:', err);
-          registrationsTableBody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 32px; color: var(--red); font-size: 13px; font-weight: 600;">⚠ Failed to load registrations. <button onclick="loadRegistrations()" style="margin-left:8px; cursor:pointer; color: var(--cyan); background:none; border:none; font-weight:700; text-decoration:underline;">Retry</button></td></tr>`;
+          registrationsTableBody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding: 32px; color: var(--red); font-size: 13px; font-weight: 600;">⚠ Failed to load registrations. <button onclick="loadRegistrations()" style="margin-left:8px; cursor:pointer; color: var(--cyan); background:none; border:none; font-weight:700; text-decoration:underline;">Retry</button></td></tr>`;
         }
       }
 
@@ -2013,6 +2193,8 @@
             <td><span class="ref-badge">${escapeHtml(r.id)}</span></td>
             <td><strong>${escapeHtml(r.firstName)}</strong></td>
             <td><strong>${escapeHtml(r.lastName)}</strong></td>
+            <td><span style="font-weight: 600; color: var(--navy); font-size: 12.5px;">${escapeHtml(r.fieldOfStudy || '-')}</span></td>
+            <td><span style="color: var(--text-muted); font-size: 12px;" title="${escapeHtml(r.primaryDepartment || '-')}">${escapeHtml(r.primaryDepartment || '-')}</span></td>
             <td>
               <a href="https://t.me/${encodeURIComponent(r.telegramUsername)}" target="_blank" rel="noopener" class="telegram-link">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
@@ -2539,6 +2721,421 @@
         currentPage = 1;
         loadRegistrations();
       });
+
+      const fieldSelect = document.getElementById('fieldFilter');
+      if (fieldSelect) {
+        fieldSelect.addEventListener('change', () => {
+          currentPage = 1;
+          loadRegistrations();
+        });
+      }
+
+      const deptSelect = document.getElementById('deptFilter');
+      if (deptSelect) {
+        deptSelect.addEventListener('change', () => {
+          currentPage = 1;
+          loadRegistrations();
+        });
+      }
+
+      // =========================================================================
+      // EXPORT FILTERED CSV TO EXCEL
+      // =========================================================================
+      const btnExportCsv = document.getElementById('btnExportFilteredCsv');
+      if (btnExportCsv) {
+        btnExportCsv.addEventListener('click', async function() {
+          try {
+            btnExportCsv.disabled = true;
+            btnExportCsv.innerHTML = '⏳ Exporting...';
+
+            const search = tableSearchInput.value.trim();
+            const status = statusFilter.value;
+            const telegramStatus = telegramFilter.value;
+            const fieldOfStudy = document.getElementById('fieldFilter') ? document.getElementById('fieldFilter').value : 'All';
+            const department = document.getElementById('deptFilter') ? document.getElementById('deptFilter').value : 'All';
+
+            const params = new URLSearchParams({
+              search,
+              status,
+              telegramStatus,
+              fieldOfStudy,
+              department,
+              page: '1',
+              limit: '10000'
+            });
+
+            const res = await fetch(`/api/admin/registrations?${params.toString()}`, {
+              headers: getAuthHeaders()
+            });
+            const result = await res.json();
+            let items = (result && result.data) ? result.data : [];
+
+            if (fieldOfStudy !== 'All') {
+              items = items.filter(r => (r.fieldOfStudy || '').toLowerCase() === fieldOfStudy.toLowerCase());
+            }
+            if (department !== 'All') {
+              items = items.filter(r => (r.primaryDepartment || '').includes(department) || (r.secondaryDepartment || '').includes(department));
+            }
+
+            if (items.length === 0) {
+              showToast('No registrations match the selected filters to export', 'warning');
+              return;
+            }
+
+            const headers = [
+              'Registration Number', 'First Name', 'Last Name', 'Field of Study', 'Academic Year',
+              'Primary Department', 'Secondary Department',
+              'Phone Number', 'Telegram Username', 'Status', 'Telegram Invite Status',
+              'Motivation', 'Registration Date'
+            ];
+
+            const csvLines = [];
+            csvLines.push(headers.map(h => '"' + h.replace(/"/g, '""') + '"').join(','));
+
+            items.forEach(r => {
+              const row = [
+                r.id || r.registrationNumber || '',
+                r.firstName || '',
+                r.lastName || '',
+                r.fieldOfStudy || '',
+                r.academicYear || '',
+                r.primaryDepartment || '',
+                r.secondaryDepartment || '',
+                r.phoneNumber || '',
+                r.telegramUsername ? '@' + r.telegramUsername : '',
+                r.status || 'Pending',
+                r.telegramInviteStatus || 'Not Sent',
+                (r.motivation || '').replace(/\r?\n/g, ' '),
+                r.createdAt ? new Date(r.createdAt).toLocaleString() : ''
+              ];
+              csvLines.push(row.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','));
+            });
+
+            const csvContent = '\uFEFF' + csvLines.join('\r\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const filterSuffix = (fieldOfStudy !== 'All' ? '_' + fieldOfStudy : '') + (department !== 'All' ? '_' + department.slice(0, 10) : '');
+            a.download = `epic_students${filterSuffix}_${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`Successfully exported ${items.length} students to Excel!`, 'success');
+          } catch (e) {
+            showToast('Export failed: ' + e.message, 'error');
+          } finally {
+            btnExportCsv.disabled = false;
+            btnExportCsv.innerHTML = `
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Export Excel</span>
+            `;
+          }
+        });
+      }
+
+      // =========================================================================
+      // BACKUP & RESTORE MODAL CONTROLLER
+      // =========================================================================
+      const backupRestoreModal = document.getElementById('backupRestoreModal');
+      const btnOpenBackupModal = document.getElementById('btnOpenBackupModal');
+      const closeBackupModal = document.getElementById('closeBackupModal');
+      const btnCancelBackupModal = document.getElementById('btnCancelBackupModal');
+      const tabBtnRestore = document.getElementById('tabBtnRestore');
+      const tabBtnExport = document.getElementById('tabBtnExport');
+      const sectionRestore = document.getElementById('sectionRestore');
+      const sectionExport = document.getElementById('sectionExport');
+      const backupDropZone = document.getElementById('backupDropZone');
+      const backupFileInput = document.getElementById('backupFileInput');
+      const backupPreviewBox = document.getElementById('backupPreviewBox');
+      const previewFileName = document.getElementById('previewFileName');
+      const previewFileSize = document.getElementById('previewFileSize');
+      const previewCountBadge = document.getElementById('previewCountBadge');
+      const previewTableContainer = document.getElementById('previewTableContainer');
+      const btnExecuteRestore = document.getElementById('btnExecuteRestore');
+      const restoreStatusMsg = document.getElementById('restoreStatusMsg');
+      const btnDownloadJsonBackup = document.getElementById('btnDownloadJsonBackup');
+      const btnDownloadCsvBackup = document.getElementById('btnDownloadCsvBackup');
+
+      let parsedBackupData = null;
+
+      function openBackupModal() {
+        if (backupRestoreModal) backupRestoreModal.classList.add('active');
+      }
+
+      function closeBackupModalFn() {
+        if (backupRestoreModal) backupRestoreModal.classList.remove('active');
+      }
+
+      if (btnOpenBackupModal) btnOpenBackupModal.addEventListener('click', openBackupModal);
+      if (closeBackupModal) closeBackupModal.addEventListener('click', closeBackupModalFn);
+      if (btnCancelBackupModal) btnCancelBackupModal.addEventListener('click', closeBackupModalFn);
+
+      // Tab Switching
+      if (tabBtnRestore && tabBtnExport) {
+        tabBtnRestore.addEventListener('click', () => {
+          tabBtnRestore.style.background = 'var(--navy)';
+          tabBtnRestore.style.color = 'white';
+          tabBtnExport.style.background = 'transparent';
+          tabBtnExport.style.color = 'var(--navy)';
+          sectionRestore.style.display = 'block';
+          sectionExport.style.display = 'none';
+        });
+
+        tabBtnExport.addEventListener('click', () => {
+          tabBtnExport.style.background = 'var(--navy)';
+          tabBtnExport.style.color = 'white';
+          tabBtnRestore.style.background = 'transparent';
+          tabBtnRestore.style.color = 'var(--navy)';
+          sectionExport.style.display = 'block';
+          sectionRestore.style.display = 'none';
+        });
+      }
+
+      // File drop & select handling
+      if (backupDropZone && backupFileInput) {
+        backupDropZone.addEventListener('click', () => backupFileInput.click());
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+          backupDropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            backupDropZone.style.borderColor = '#10B981';
+            backupDropZone.style.background = '#ECFDF5';
+          });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+          backupDropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            backupDropZone.style.borderColor = '#CBD5E1';
+            backupDropZone.style.background = '#F8FAFC';
+          });
+        });
+
+        backupDropZone.addEventListener('drop', (e) => {
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            processBackupFile(e.dataTransfer.files[0]);
+          }
+        });
+
+        backupFileInput.addEventListener('change', (e) => {
+          if (e.target.files && e.target.files[0]) {
+            processBackupFile(e.target.files[0]);
+          }
+        });
+      }
+
+      function processBackupFile(file) {
+        previewFileName.textContent = file.name;
+        previewFileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+        restoreStatusMsg.style.display = 'none';
+
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const content = evt.target.result;
+          try {
+            if (file.name.endsWith('.json')) {
+              const json = JSON.parse(content);
+              parsedBackupData = json;
+              const regList = Array.isArray(json) ? json : (json.registrations || []);
+              previewCountBadge.textContent = regList.length + ' طالب جاهز للاسترجاع';
+              renderMiniPreview(regList);
+            } else if (file.name.endsWith('.csv')) {
+              const regList = parseCsvToRegistrations(content);
+              parsedBackupData = { registrations: regList };
+              previewCountBadge.textContent = regList.length + ' طالب جاهز للاسترجاع';
+              renderMiniPreview(regList);
+            } else {
+              throw new Error('يرجى اختيار ملف .json أو .csv صالح');
+            }
+
+            backupPreviewBox.style.display = 'block';
+            btnExecuteRestore.style.display = 'inline-block';
+          } catch (err) {
+            alert('فشل قراءة الملف: ' + err.message);
+            backupPreviewBox.style.display = 'none';
+            btnExecuteRestore.style.display = 'none';
+          }
+        };
+        reader.readAsText(file, 'utf-8');
+      }
+
+      function parseCsvToRegistrations(csvText) {
+        const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
+        if (lines.length < 2) return [];
+
+        const headerRow = splitCsvRow(lines[0]).map(h => h.trim().toLowerCase());
+        const records = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const cols = splitCsvRow(lines[i]);
+          if (cols.length === 0 || !cols.some(c => c.trim())) continue;
+
+          const rec = {};
+          headerRow.forEach((h, idx) => {
+            const val = (cols[idx] || '').trim();
+            if (h.includes('registration') || h === 'id') rec.id = val;
+            else if (h.includes('first') || h === 'prenom') rec.firstName = val;
+            else if (h.includes('last') || h === 'nom') rec.lastName = val;
+            else if (h.includes('field') || h === 'etude') rec.fieldOfStudy = val;
+            else if (h.includes('year') || h === 'annee') rec.academicYear = val;
+            else if (h.includes('primary') || (h.includes('department') && !h.includes('secondary'))) rec.primaryDepartment = val;
+            else if (h.includes('secondary')) rec.secondaryDepartment = val;
+            else if (h.includes('phone') || h === 'tel') rec.phoneNumber = val;
+            else if (h.includes('telegram')) rec.telegramUsername = val.replace(/^@/, '');
+            else if (h.includes('status') && !h.includes('invite')) rec.status = val;
+            else if (h.includes('invite')) rec.telegramInviteStatus = val;
+            else if (h.includes('motivation')) rec.motivation = val;
+          });
+
+          if (rec.id || (rec.firstName && rec.lastName)) {
+            records.push(rec);
+          }
+        }
+        return records;
+      }
+
+      function splitCsvRow(row) {
+        const result = [];
+        let current = '';
+        let insideQuotes = false;
+        for (let i = 0; i < row.length; i++) {
+          const char = row[i];
+          if (char === '"') {
+            if (insideQuotes && row[i + 1] === '"') {
+              current += '"';
+              i++;
+            } else {
+              insideQuotes = !insideQuotes;
+            }
+          } else if (char === ',' && !insideQuotes) {
+            result.push(current);
+            current = '';
+          } else {
+            current += char;
+          }
+        }
+        result.push(current);
+        return result;
+      }
+
+      function renderMiniPreview(records) {
+        if (!records || records.length === 0) {
+          previewTableContainer.innerHTML = '<div style="padding: 10px; text-align: center; color: var(--text-muted);">لا توجد سجلات في الملف</div>';
+          return;
+        }
+
+        const sample = records.slice(0, 5);
+        let tableHtml = '<table style="width: 100%; border-collapse: collapse; text-align: right;">';
+        tableHtml += '<thead style="background: #F8FAFC; color: var(--text-muted);"><tr><th style="padding: 6px 8px;">الاسم</th><th style="padding: 6px 8px;">رقم التسجيل</th><th style="padding: 6px 8px;">الهاتف</th><th style="padding: 6px 8px;">تيليجرام</th></tr></thead><tbody>';
+        sample.forEach(r => {
+          tableHtml += `<tr style="border-bottom: 1px solid #F1F5F9;">
+            <td style="padding: 6px 8px; font-weight: 600;">${escapeHtml(r.firstName || '')} ${escapeHtml(r.lastName || '')}</td>
+            <td style="padding: 6px 8px; color: var(--navy); font-family: monospace;">${escapeHtml(r.id || r.registrationNumber || '-')}</td>
+            <td style="padding: 6px 8px;">${escapeHtml(r.phoneNumber || '-')}</td>
+            <td style="padding: 6px 8px;">@${escapeHtml((r.telegramUsername || '').replace(/^@/, ''))}</td>
+          </tr>`;
+        });
+        if (records.length > 5) {
+          tableHtml += `<tr><td colspan="4" style="padding: 8px; text-align: center; color: var(--text-muted);">... بالإضافة إلى ${records.length - 5} طالب آخرين</td></tr>`;
+        }
+        tableHtml += '</tbody></table>';
+        previewTableContainer.innerHTML = tableHtml;
+      }
+
+      // Execute Restore
+      if (btnExecuteRestore) {
+        btnExecuteRestore.addEventListener('click', async function() {
+          if (!parsedBackupData) return;
+          const mode = document.querySelector('input[name="restoreMode"]:checked')?.value || 'merge';
+
+          if (mode === 'replace') {
+            const confirmReplace = confirm('تحذير: لقد اخترت "استبدال كامل". سيتم حذف السجلات الحالية واستبدالها بالكامل بالسجلات الجديدة. هل أنت متأكد؟');
+            if (!confirmReplace) return;
+          }
+
+          btnExecuteRestore.disabled = true;
+          btnExecuteRestore.textContent = '⏳ جاري الاستعادة...';
+          restoreStatusMsg.style.display = 'block';
+          restoreStatusMsg.style.background = '#EFF6FF';
+          restoreStatusMsg.style.color = '#1D4ED8';
+          restoreStatusMsg.textContent = 'جاري إرسال البيانات وتحديث قاعدة البيانات...';
+
+          try {
+            const res = await fetch('/api/admin/restore', {
+              method: 'POST',
+              headers: getAuthHeaders(),
+              body: JSON.stringify({ mode, data: parsedBackupData })
+            });
+            const resData = await res.json();
+            if (resData.success) {
+              restoreStatusMsg.style.background = '#ECFDF5';
+              restoreStatusMsg.style.color = '#065F46';
+              restoreStatusMsg.textContent = '✓ ' + (resData.message || 'تمت استعادة البيانات بنجاح!');
+              showToast('تمت استعادة البيانات بنجاح!', 'success');
+              setTimeout(() => {
+                closeBackupModalFn();
+                currentPage = 1;
+                loadRegistrations();
+              }, 1200);
+            } else {
+              throw new Error(resData.error || 'حدث خطأ غير متوقع');
+            }
+          } catch (err) {
+            restoreStatusMsg.style.background = '#FEF2F2';
+            restoreStatusMsg.style.color = '#991B1B';
+            restoreStatusMsg.textContent = 'فشلت الاستعادة: ' + err.message;
+            showToast('فشل في استعادة البيانات: ' + err.message, 'error');
+          } finally {
+            btnExecuteRestore.disabled = false;
+            btnExecuteRestore.textContent = '⚡ استعادة البيانات الآن';
+          }
+        });
+      }
+
+      // Export Full JSON Backup
+      if (btnDownloadJsonBackup) {
+        btnDownloadJsonBackup.addEventListener('click', async function() {
+          try {
+            btnDownloadJsonBackup.disabled = true;
+            btnDownloadJsonBackup.textContent = '⏳ جاري التصدير...';
+            const res = await fetch('/api/admin/backup', { headers: getAuthHeaders() });
+            const result = await res.json();
+            if (!result.success || !result.backup) throw new Error(result.error || 'فشل التصدير');
+
+            const blob = new Blob([JSON.stringify(result.backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `epic_database_backup_${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('تم تحميل ملف النسخة الاحتياطية بنجاح!', 'success');
+          } catch (e) {
+            showToast('فشل تحميل النسخة الاحتياطية: ' + e.message, 'error');
+          } finally {
+            btnDownloadJsonBackup.disabled = false;
+            btnDownloadJsonBackup.textContent = 'تحميل JSON';
+          }
+        });
+      }
+
+      // Export Full CSV from Backup Modal
+      if (btnDownloadCsvBackup) {
+        btnDownloadCsvBackup.addEventListener('click', () => {
+          if (btnExportCsv) {
+            btnExportCsv.click();
+          }
+        });
+      }
 
       refreshBtn.addEventListener('click', () => { currentPage = 1; loadRegistrations(); });
 
